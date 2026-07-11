@@ -43,7 +43,6 @@ import profile_img2 from './profile_img2.png'
 import profile_img3 from './profile_img3.png'
 import lesson_icon from './lesson_icon.svg'
 
-
 export const assets = {
     logo,
     search_icon,
@@ -93,8 +92,8 @@ export const assets = {
 
 export const dummyEducatorData = {
     "_id": "675ac1512100b91a6d9b8b24",
-    "name": "GreatStack",
-    "email": "user.greatstack@gmail.com",
+    "name": "Aditya Arya",
+    "email": "user.adityaarya@gmail.com",
     "imageUrl": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yclFkaDBOMmFqWnBoTTRBOXZUanZxVlo0aXYifQ",
     "createdAt": "2024-12-12T10:56:17.930Z",
     "updatedAt": "2024-12-12T10:56:17.930Z",
@@ -107,21 +106,21 @@ export const dummyTestimonial = [
         role: 'SWE 1 @ Amazon',
         image: assets.profile_img_1,
         rating: 5,
-        feedback: 'I\'ve been using Imagify for nearly two years, primarily for Instagram, and it has been incredibly user-friendly, making my work much easier.',
+        feedback: 'I used this platform to prepare for my software engineering interviews. The structured DSA curriculum and clean visual explanations helped me land an offer at Amazon!',
     },
     {
         name: 'Richard Nelson',
         role: 'SWE 2 @ Samsung',
         image: assets.profile_img_2,
-        rating: 4,
-        feedback: 'I\'ve been using Imagify for nearly two years, primarily for Instagram, and it has been incredibly user-friendly, making my work much easier.',
+        rating: 4.5,
+        feedback: 'The graph algorithms and dynamic programming sections are exceptionally well explained. Implementing structures from scratch made everything click for me at Samsung!',
     },
     {
         name: 'James Washington',
         role: 'SWE 2 @ Google',
         image: assets.profile_img_3,
-        rating: 4.5,
-        feedback: 'I\'ve been using Imagify for nearly two years, primarily for Instagram, and it has been incredibly user-friendly, making my work much easier.',
+        rating: 5,
+        feedback: "Highly recommend this course! The step-by-step tree traversals and interview-focused questions were exactly what I needed for Google's technical rounds.",
     },
 ];
 
@@ -170,7 +169,7 @@ export const dummyDashboardData = {
         }
     ],
     "totalCourses": 8
-}
+};
 
 export const dummyStudentEnrolled = [
     {
@@ -209,7 +208,7 @@ export const dummyStudentEnrolled = [
         "courseTitle": "Web Development Bootcamp",
         "purchaseDate": "2024-12-20T11:04:48.798Z"
     }
-]
+];
 
 export const dummyCourses = [
     {
@@ -756,5 +755,548 @@ export const dummyCourses = [
         "updatedAt": "2025-01-02T06:56:13.208Z",
         "__v": 1,
         "courseThumbnail": "https://img.youtube.com/vi/WbV3zRgpw_E/maxresdefault.jpg"
+    },
+    {
+        "_id": "dsa_course_001",
+        "courseTitle": "Mastering Data Structures & Algorithms",
+        "courseDescription": "<h2>Master DSA for Coding Interviews</h2><p>Data Structures and Algorithms are the core building blocks of computer science. In this course, you will learn standard data structures like Arrays, Linked Lists, Stacks, Queues, Trees, and Graphs, and how to analyze their efficiency using Big O notation.</p><p>This course is designed for university students, self-taught developers, and professionals aiming to clear technical interviews at top-tier companies.</p><ul><li>Analyze algorithms using Big O complexity</li><li>Implement abstract data structures from scratch</li><li>Master core recursion and backtracking techniques</li></ul>",
+        "coursePrice": 49.99,
+        "isPublished": true,
+        "discount": 20,
+        "courseContent": [
+            {
+                "chapterId": "chapter1",
+                "chapterOrder": 1,
+                "chapterTitle": "Introduction & Complexity Analysis",
+                "chapterContent": [
+                    {
+                        "lectureId": "lecture1",
+                        "lectureTitle": "Introduction to DSA & Big O Notation",
+                        "lectureDuration": 16,
+                        "lectureUrl": "https://youtu.be/CBWnBi-awSA",
+                        "isPreviewFree": true,
+                        "lectureOrder": 1
+                    },
+                    {
+                        "lectureId": "lecture2",
+                        "lectureTitle": "Time and Space Complexity Analysis",
+                        "lectureDuration": 19,
+                        "lectureUrl": "https://youtu.be/4l87c2aeB4I",
+                        "isPreviewFree": false,
+                        "lectureOrder": 2
+                    }
+                ]
+            },
+            {
+                "chapterId": "chapter2",
+                "chapterOrder": 2,
+                "chapterTitle": "Linear Data Structures",
+                "chapterContent": [
+                    {
+                        "lectureId": "lecture3",
+                        "lectureTitle": "Arrays & Dynamic Arrays",
+                        "lectureDuration": 20,
+                        "lectureUrl": "https://youtu.be/pZQeBJsGoDQ",
+                        "isPreviewFree": true,
+                        "lectureOrder": 1
+                    },
+                    {
+                        "lectureId": "lecture4",
+                        "lectureTitle": "Singly & Doubly Linked Lists",
+                        "lectureDuration": 10,
+                        "lectureUrl": "https://youtu.be/ufHT2WEkkC4",
+                        "isPreviewFree": false,
+                        "lectureOrder": 2
+                    }
+                ]
+            }
+        ],
+        "educator": "675ac1512100b91a6d9b8b24",
+        "enrolledStudents": [
+            "user_2qQlvXyr02B4Bq6hT0Gvaa5fT9V",
+            "user_2qjlgkAqIMpiR2flWIRzvWKtE0w"
+        ],
+        "courseRatings": [
+            {
+                "userId": "user_2qjlgkAqIMpiR2flWIRzvWKtE0w",
+                "rating": 5,
+                "_id": "6773e37360cb0ab974342314"
+            }
+        ],
+        "createdAt": "2024-12-17T08:16:53.622Z",
+        "updatedAt": "2025-01-02T04:47:44.701Z",
+        "__v": 4,
+        "courseThumbnail": "https://images.unsplash.com/photo-1605379399642-870262d3d051?q=80&w=600&auto=format&fit=crop"
+    },
+    {
+        "_id": "dsa_course_002",
+        "courseTitle": "Algorithms & Data Structures Bootcamp",
+        "courseDescription": "<h2>The Ultimate Bootcamp for Problem Solving</h2><p>Take your programming skills to the next level by mastering standard search, sort, and graph algorithms. This course guides you step-by-step through core recursion, dynamic programming, and dynamic array implementations.</p><p>Perfect for candidates preparing for FAANG interviews or competitive programming.</p><ul><li>Master binary search, merge sort, and quick sort</li><li>Build advanced tree structures (BST, AVL, Heap)</li><li>Solve 100+ LeetCode problems step-by-step</li></ul>",
+        "coursePrice": 79.99,
+        "isPublished": true,
+        "discount": 15,
+        "courseContent": [
+            {
+                "chapterId": "chapter1",
+                "chapterOrder": 1,
+                "chapterTitle": "Sorting & Searching Algorithms",
+                "chapterContent": [
+                    {
+                        "lectureId": "lecture1",
+                        "lectureTitle": "Linear Search and Binary Search",
+                        "lectureDuration": 15,
+                        "lectureUrl": "https://youtu.be/HdLIMoQkXFA",
+                        "isPreviewFree": true,
+                        "lectureOrder": 1
+                    },
+                    {
+                        "lectureId": "lecture2",
+                        "lectureTitle": "Bubble Sort, Insertion Sort, Selection Sort",
+                        "lectureDuration": 22,
+                        "lectureUrl": "https://youtu.be/HdLIMoQkXFA",
+                        "isPreviewFree": false,
+                        "lectureOrder": 2
+                    }
+                ]
+            },
+            {
+                "chapterId": "chapter2",
+                "chapterOrder": 2,
+                "chapterTitle": "Advanced Sorting",
+                "chapterContent": [
+                    {
+                        "lectureId": "lecture3",
+                        "lectureTitle": "Merge Sort and Quick Sort Complexity",
+                        "lectureDuration": 28,
+                        "lectureUrl": "https://youtu.be/HdLIMoQkXFA",
+                        "isPreviewFree": true,
+                        "lectureOrder": 1
+                    },
+                    {
+                        "lectureId": "lecture4",
+                        "lectureTitle": "Heap Sort & Heap Data Structures",
+                        "lectureDuration": 25,
+                        "lectureUrl": "https://youtu.be/HdLIMoQkXFA",
+                        "isPreviewFree": false,
+                        "lectureOrder": 2
+                    }
+                ]
+            }
+        ],
+        "educator": "675ac1512100b91a6d9b8b24",
+        "enrolledStudents": [
+            "user_2qQlvXyr02B4Bq6hT0Gvaa5fT9V",
+            "user_2qjlgkAqIMpiR2flWIRzvWKtE0w"
+        ],
+        "courseRatings": [
+            {
+                "userId": "user_2qjlgkAqIMpiR2flWIRzvWKtE0w",
+                "rating": 5,
+                "_id": "6776369244daad0f313d81a9"
+            }
+        ],
+        "createdAt": "2024-12-17T08:16:53.622Z",
+        "updatedAt": "2025-01-02T06:47:54.446Z",
+        "__v": 3,
+        "courseThumbnail": "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=600&auto=format&fit=crop"
+    },
+    {
+        "_id": "dsa_course_003",
+        "courseTitle": "Dynamic Programming & Greedy Algorithms",
+        "courseDescription": "<h2>Master Advanced Optimization Techniques</h2><p>Dynamic Programming (DP) is one of the most challenging topics in technical interviews. In this course, you will break down complex problems into subproblems and solve them using Memoization and Tabulation.</p><ul><li>Learn the difference between Memoization & Tabulation</li><li>Solve classic DP problems: 0/1 Knapsack, LCS, LIS</li><li>Understand Greedy approach vs Dynamic Programming</li></ul>",
+        "coursePrice": 69.99,
+        "isPublished": true,
+        "discount": 15,
+        "courseContent": [
+            {
+                "chapterId": "chapter1",
+                "chapterOrder": 1,
+                "chapterTitle": "Introduction to Recursion & Memoization",
+                "chapterContent": [
+                    {
+                        "lectureId": "lecture1",
+                        "lectureTitle": "Understanding Overlapping Subproblems",
+                        "lectureDuration": 14,
+                        "lectureUrl": "https://youtu.be/samplelink5",
+                        "isPreviewFree": true,
+                        "lectureOrder": 1
+                    },
+                    {
+                        "lectureId": "lecture2",
+                        "lectureTitle": "Fibonacci Sequence: Top-down vs Bottom-up",
+                        "lectureDuration": 18,
+                        "lectureUrl": "https://youtu.be/samplelink6",
+                        "isPreviewFree": false,
+                        "lectureOrder": 2
+                    }
+                ]
+            },
+            {
+                "chapterId": "chapter2",
+                "chapterOrder": 2,
+                "chapterTitle": "Classic Dynamic Programming Problems",
+                "chapterContent": [
+                    {
+                        "lectureId": "lecture3",
+                        "lectureTitle": "0/1 Knapsack Problem & Decision Trees",
+                        "lectureDuration": 30,
+                        "lectureUrl": "https://youtu.be/samplelink7",
+                        "isPreviewFree": true,
+                        "lectureOrder": 1
+                    },
+                    {
+                        "lectureId": "lecture4",
+                        "lectureTitle": "Longest Common Subsequence (LCS)",
+                        "lectureDuration": 22,
+                        "lectureUrl": "https://youtu.be/samplelink8",
+                        "isPreviewFree": false,
+                        "lectureOrder": 2
+                    }
+                ]
+            }
+        ],
+        "educator": "675ac1512100b91a6d9b8b24",
+        "enrolledStudents": [
+            "user_2qQlvXyr02B4Bq6hT0Gvaa5fT9V",
+            "user_2qjlgkAqIMpiR2flWIRzvWKtE0w"
+        ],
+        "courseRatings": [],
+        "createdAt": "2024-12-27T11:30:00.000Z",
+        "updatedAt": "2024-12-31T04:14:49.773Z",
+        "__v": 2,
+        "courseThumbnail": "https://images.unsplash.com/photo-1504639725590-34d0984388bd?q=80&w=600&auto=format&fit=crop"
+    },
+    {
+        "_id": "dsa_course_004",
+        "courseTitle": "Graph Algorithms & Tree Structures",
+        "courseDescription": "<h2>Master Trees, Binary Search Trees, and Graph Traversals</h2><p>Graphs and Trees are everywhere in computer science. Learn how to traverse trees (Pre-order, In-order, Post-order) and graphs (BFS, DFS), and implement shortest path algorithms.</p><ul><li>Implement Graph representation (Adjacency Matrix, List)</li><li>Learn Breadth-First Search & Depth-First Search</li><li>Master Dijkstra's Shortest Path Algorithm</li></ul>",
+        "coursePrice": 99.99,
+        "isPublished": true,
+        "discount": 25,
+        "courseContent": [
+            {
+                "chapterId": "chapter1",
+                "chapterOrder": 1,
+                "chapterTitle": "Tree Data Structures",
+                "chapterContent": [
+                    {
+                        "lectureId": "lecture1",
+                        "lectureTitle": "Binary Tree Representation & Terminology",
+                        "lectureDuration": 16,
+                        "lectureUrl": "https://youtu.be/-HeadgoqJ7A",
+                        "isPreviewFree": true,
+                        "lectureOrder": 1
+                    },
+                    {
+                        "lectureId": "lecture2",
+                        "lectureTitle": "In-order, Pre-order, and Post-order Traversals",
+                        "lectureDuration": 20,
+                        "lectureUrl": "https://youtu.be/-HeadgoqJ7A",
+                        "isPreviewFree": false,
+                        "lectureOrder": 2
+                    }
+                ]
+            },
+            {
+                "chapterId": "chapter2",
+                "chapterOrder": 2,
+                "chapterTitle": "Graph Basics & Traversals",
+                "chapterContent": [
+                    {
+                        "lectureId": "lecture3",
+                        "lectureTitle": "Breadth-First Search (BFS) in Action",
+                        "lectureDuration": 25,
+                        "lectureUrl": "https://youtu.be/-HeadgoqJ7A",
+                        "isPreviewFree": true,
+                        "lectureOrder": 1
+                    },
+                    {
+                        "lectureId": "lecture4",
+                        "lectureTitle": "Depth-First Search (DFS) & Call Stacks",
+                        "lectureDuration": 22,
+                        "lectureUrl": "https://youtu.be/-HeadgoqJ7A",
+                        "isPreviewFree": false,
+                        "lectureOrder": 2
+                    }
+                ]
+            }
+        ],
+        "educator": "675ac1512100b91a6d9b8b24",
+        "enrolledStudents": [
+            "user_2qQlvXyr02B4Bq6hT0Gvaa5fT9V",
+            "user_2qjlgkAqIMpiR2flWIRzvWKtE0w"
+        ],
+        "courseRatings": [],
+        "createdAt": "2024-12-17T08:16:53.622Z",
+        "updatedAt": "2024-12-31T05:31:27.290Z",
+        "__v": 2,
+        "courseThumbnail": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=600&auto=format&fit=crop"
+    },
+    {
+        "_id": "dsa_course_005",
+        "courseTitle": "Advanced Sorting & Searching Algorithms",
+        "courseDescription": "<h2>Deep Dive into Sorting Networks & Sublinear Search</h2><p>Learn specialized algorithms that operate in sublinear or linear time, including Radix Sort, Counting Sort, and advanced hash map indexing mechanisms.</p><ul><li>Understand non-comparison based sorting</li><li>Implement custom hash functions & collision handling</li><li>Learn String matching algorithms (KMP, Rabin-Karp)</li></ul>",
+        "coursePrice": 69.99,
+        "isPublished": true,
+        "discount": 20,
+        "courseContent": [
+            {
+                "chapterId": "chapter1",
+                "chapterOrder": 1,
+                "chapterTitle": "Linear Time Sorting",
+                "chapterContent": [
+                    {
+                        "lectureId": "lecture1",
+                        "lectureTitle": "Counting Sort & Stable Sorting",
+                        "lectureDuration": 15,
+                        "lectureUrl": "https://youtu.be/-HeadgoqJ7A",
+                        "isPreviewFree": true,
+                        "lectureOrder": 1
+                    },
+                    {
+                        "lectureId": "lecture2",
+                        "lectureTitle": "Radix Sort & Bucket Sort Algorithms",
+                        "lectureDuration": 22,
+                        "lectureUrl": "https://youtu.be/-HeadgoqJ7A",
+                        "isPreviewFree": false,
+                        "lectureOrder": 2
+                    }
+                ]
+            },
+            {
+                "chapterId": "chapter2",
+                "chapterOrder": 2,
+                "chapterTitle": "Hashing & String Match",
+                "chapterContent": [
+                    {
+                        "lectureId": "lecture3",
+                        "lectureTitle": "Hash Collisions & Chaining vs Open Addressing",
+                        "lectureDuration": 26,
+                        "lectureUrl": "https://youtu.be/-HeadgoqJ7A",
+                        "isPreviewFree": true,
+                        "lectureOrder": 1
+                    },
+                    {
+                        "lectureId": "lecture4",
+                        "lectureTitle": "Rabin-Karp String Matching with Hash",
+                        "lectureDuration": 30,
+                        "lectureUrl": "https://youtu.be/-HeadgoqJ7A",
+                        "isPreviewFree": false,
+                        "lectureOrder": 2
+                    }
+                ]
+            }
+        ],
+        "educator": "675ac1512100b91a6d9b8b24",
+        "enrolledStudents": [
+            "user_2qjlgkAqIMpiR2flWIRzvWKtE0w"
+        ],
+        "courseRatings": [],
+        "createdAt": "2024-12-17T08:16:53.622Z",
+        "updatedAt": "2024-12-31T05:32:55.357Z",
+        "__v": 1,
+        "courseThumbnail": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=600&auto=format&fit=crop"
+    },
+    {
+        "_id": "dsa_course_006",
+        "courseTitle": "Competitive Programming & Problem Solving",
+        "courseDescription": "<h2>Accelerate Your Problem Solving Abilities</h2><p>This course focuses on coding speed, advanced math, number theory, and game theory topics commonly tested in competitive coding platforms like Codeforces and LeetCode.</p><ul><li>Master Bitwise manipulation and math tricks</li><li>Learn Sliding Window & Two Pointer techniques</li><li>Solve complex problems using Segment Trees</li></ul>",
+        "coursePrice": 89.99,
+        "isPublished": true,
+        "discount": 20,
+        "courseContent": [
+            {
+                "chapterId": "chapter1",
+                "chapterOrder": 1,
+                "chapterTitle": "Basic Math & Bit Manipulation",
+                "chapterContent": [
+                    {
+                        "lectureId": "lecture1",
+                        "lectureTitle": "Bitwise Operators & Number Bases",
+                        "lectureDuration": 18,
+                        "lectureUrl": "https://youtu.be/samplelink1",
+                        "isPreviewFree": true,
+                        "lectureOrder": 1
+                    },
+                    {
+                        "lectureId": "lecture2",
+                        "lectureTitle": "Sieve of Eratosthenes & Prime Factorization",
+                        "lectureDuration": 20,
+                        "lectureUrl": "https://youtu.be/samplelink2",
+                        "isPreviewFree": false,
+                        "lectureOrder": 2
+                    }
+                ]
+            },
+            {
+                "chapterId": "chapter2",
+                "chapterOrder": 2,
+                "chapterTitle": "Two Pointers & Sliding Window",
+                "chapterContent": [
+                    {
+                        "lectureId": "lecture3",
+                        "lectureTitle": "Classic Two Sum Variation with Pointers",
+                        "lectureDuration": 20,
+                        "lectureUrl": "https://youtu.be/samplelink3",
+                        "isPreviewFree": true,
+                        "lectureOrder": 1
+                    },
+                    {
+                        "lectureId": "lecture4",
+                        "lectureTitle": "Sliding Window Maximum & Deque",
+                        "lectureDuration": 25,
+                        "lectureUrl": "https://youtu.be/samplelink4",
+                        "isPreviewFree": false,
+                        "lectureOrder": 2
+                    }
+                ]
+            }
+        ],
+        "educator": "675ac1512100b91a6d9b8b24",
+        "enrolledStudents": [
+            "user_2qjlgkAqIMpiR2flWIRzvWKtE0w",
+            "user_2qQlvXyr02B4Bq6hT0Gvaa5fT9V"
+        ],
+        "courseRatings": [
+            {
+                "userId": "user_2qjlgkAqIMpiR2flWIRzvWKtE0w",
+                "rating": 5,
+                "_id": "6773acf160cb0ab974342248"
+            }
+        ],
+        "createdAt": "2024-12-27T10:00:00.000Z",
+        "updatedAt": "2024-12-31T09:57:48.992Z",
+        "__v": 3,
+        "courseThumbnail": "https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=600&auto=format&fit=crop"
+    },
+    {
+        "_id": "dsa_course_007",
+        "courseTitle": "Data Structures and Algorithms in Java",
+        "courseDescription": "<h2>Learn DSA using Java</h2><p>Master standard collections and abstract data types in Java. We build custom Lists, BSTs, and Graphs using Java's object-oriented paradigms and type-safe Generics.</p><ul><li>Implement custom Generics in Java for DSA</li><li>Learn Java Collections Framework internals (HashMap, ArrayList)</li><li>Master recursion and memory layouts in the JVM</li></ul>",
+        "coursePrice": 89.99,
+        "isPublished": true,
+        "discount": 30,
+        "courseContent": [
+            {
+                "chapterId": "chapter1",
+                "chapterOrder": 1,
+                "chapterTitle": "OOP Concepts in Java for DSA",
+                "chapterContent": [
+                    {
+                        "lectureId": "lecture1",
+                        "lectureTitle": "Reference Variables, Objects, & Memory in Java",
+                        "lectureDuration": 16,
+                        "lectureUrl": "https://youtu.be/-HeadgoqJ7A",
+                        "isPreviewFree": true,
+                        "lectureOrder": 1
+                    },
+                    {
+                        "lectureId": "lecture2",
+                        "lectureTitle": "Custom ArrayList implementation with Generics",
+                        "lectureDuration": 24,
+                        "lectureUrl": "https://youtu.be/-HeadgoqJ7A",
+                        "isPreviewFree": false,
+                        "lectureOrder": 2
+                    }
+                ]
+            },
+            {
+                "chapterId": "chapter2",
+                "chapterOrder": 2,
+                "chapterTitle": "Java Collections Framework",
+                "chapterContent": [
+                    {
+                        "lectureId": "lecture3",
+                        "lectureTitle": "LinkedList class & Node class internals",
+                        "lectureDuration": 22,
+                        "lectureUrl": "https://youtu.be/-HeadgoqJ7A",
+                        "isPreviewFree": true,
+                        "lectureOrder": 1
+                    },
+                    {
+                        "lectureId": "lecture4",
+                        "lectureTitle": "HashMap internal bucketing & hashing",
+                        "lectureDuration": 26,
+                        "lectureUrl": "https://youtu.be/-HeadgoqJ7A",
+                        "isPreviewFree": false,
+                        "lectureOrder": 2
+                    }
+                ]
+            }
+        ],
+        "educator": "675ac1512100b91a6d9b8b24",
+        "enrolledStudents": [
+            "user_2qjlgkAqIMpiR2flWIRzvWKtE0w"
+        ],
+        "courseRatings": [],
+        "createdAt": "2024-12-17T08:16:53.622Z",
+        "updatedAt": "2025-01-02T06:53:59.753Z",
+        "__v": 1,
+        "courseThumbnail": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=600&auto=format&fit=crop"
+    },
+    {
+        "_id": "dsa_course_008",
+        "courseTitle": "Complete DSA Course: Zero to Hero",
+        "courseDescription": "<h2>Your All-in-One Data Structures & Algorithms Guide</h2><p>A comprehensive masterclass starting from absolute basics up to advanced concepts. We cover arrays, sorting, trees, graphs, backtracking, and dynamic programming.</p><ul><li>Understand the intuition behind every data structure</li><li>Learn dynamic memory management and garbage collection</li><li>Get ready for mid-level and senior coding interviews</li></ul>",
+        "coursePrice": 59.99,
+        "isPublished": true,
+        "discount": 15,
+        "courseContent": [
+            {
+                "chapterId": "chapter1",
+                "chapterOrder": 1,
+                "chapterTitle": "Foundations & Recursion",
+                "chapterContent": [
+                    {
+                        "lectureId": "lecture1",
+                        "lectureTitle": "Intro to Algorithms & Logic Building",
+                        "lectureDuration": 15,
+                        "lectureUrl": "https://youtu.be/-HeadgoqJ7A",
+                        "isPreviewFree": true,
+                        "lectureOrder": 1
+                    },
+                    {
+                        "lectureId": "lecture2",
+                        "lectureTitle": "Recursion Stack & Call stack execution",
+                        "lectureDuration": 20,
+                        "lectureUrl": "https://youtu.be/-HeadgoqJ7A",
+                        "isPreviewFree": false,
+                        "lectureOrder": 2
+                    }
+                ]
+            },
+            {
+                "chapterId": "chapter2",
+                "chapterOrder": 2,
+                "chapterTitle": "Sorting & Abstract Types",
+                "chapterContent": [
+                    {
+                        "lectureId": "lecture3",
+                        "lectureTitle": "Divide & Conquer Paradigm basics",
+                        "lectureDuration": 24,
+                        "lectureUrl": "https://youtu.be/-HeadgoqJ7A",
+                        "isPreviewFree": true,
+                        "lectureOrder": 1
+                    },
+                    {
+                        "lectureId": "lecture4",
+                        "lectureTitle": "Abstract Data Types & Interface Design",
+                        "lectureDuration": 18,
+                        "lectureUrl": "https://youtu.be/-HeadgoqJ7A",
+                        "isPreviewFree": false,
+                        "lectureOrder": 2
+                    }
+                ]
+            }
+        ],
+        "educator": "675ac1512100b91a6d9b8b24",
+        "enrolledStudents": [
+            "user_2qjlgkAqIMpiR2flWIRzvWKtE0w"
+        ],
+        "courseRatings": [],
+        "createdAt": "2024-12-17T08:16:53.622Z",
+        "updatedAt": "2025-01-02T06:56:13.208Z",
+        "__v": 1,
+        "courseThumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=600&auto=format&fit=crop"
     }
-]
+];
