@@ -33,9 +33,10 @@ const CourseDetails = () => {
 
 
          {/* left column */}
-         <div>
-            <h1>{courseData.courseTitle}</h1>
-            <p></p>
+         <div className='max-w-xl z-10 text-gray-500'>
+            <h1 className='md:text-course-details-heading-large
+            text-course-details-heading-small font-semibold text-gray-800'>{courseData.courseTitle}</h1>
+            <p className='pt-4 md:text-base text-sm' dangerouslySetInnerHTML={{__html:courseData.courseDescription.slice(0,200)}}></p>
          </div>
          {/* right column */}
          <div></div>
