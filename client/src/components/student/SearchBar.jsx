@@ -1,6 +1,7 @@
-import React,{ useState} from 'react'
+import React, { useState, useEffect } from 'react'
 import { assets } from '../../assets/assets'
 import { useNavigate } from 'react-router-dom';
+
 const SearchBar = ({data}) => {
 
     const navigate = useNavigate();
@@ -8,8 +9,16 @@ const SearchBar = ({data}) => {
 
     const onSearchHandler = (e) => {
         e.preventDefault();
-        navigate('course-list/' + input);
+        if (input.trim()) {
+            navigate('/course-list/' + input);
+        } else {
+            navigate('/course-list');
+        }
     }
+
+    useEffect(() => {
+        setInput(data ? data : '');
+    }, [data])
 
 
     return (
