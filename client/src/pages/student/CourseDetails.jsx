@@ -7,6 +7,7 @@ import { assets } from '../../assets/assets';
 import humanizeDuration from 'humanize-duration';
 import Rating from '../../components/student/Rating';
 import Footer from '../../components/student/Footer';
+import YouTube from 'react-youtube';
 
 const CourseDetails = () => {
 
@@ -15,6 +16,8 @@ const CourseDetails = () => {
     const [courseData, setCourseData] = useState(null);
     const [openSections, setOpenSections] = useState({});
     const [isAllreadyEnrolled, setIsAllreadyEnrolled] = useState(false)
+    const [playerData, setPlayerData] = useState(null)
+
 
     const { allCourses, calculateRating, calculateNoOfLectures, calculateChapterTime, calculateCourseDuration, currency } = useContext(AppContext)
 
@@ -117,9 +120,15 @@ const CourseDetails = () => {
                                                             <p className='font-medium text-gray-800 text-sm hover:text-blue-600 transition-colors duration-150 cursor-pointer'>{lecture.lectureTitle}</p>
                                                             <div className='flex items-center gap-3 text-xs text-gray-500'>
                                                                 {lecture.isPreviewFree && (
-                                                                    <span className='text-blue-600 font-semibold cursor-pointer hover:underline bg-blue-50 px-2 py-0.5 rounded'>
+                                                                    <p 
+                                                                    onClick={()=> setPlayerData({
+                                                                        videoId: lecture.lectureUrl.split('/').pop()
+                                                                    })}
+                                                                        
+                                                                    
+                                                                    className='text-blue-600 font-semibold cursor-pointer hover:underline bg-blue-50 px-2 py-0.5 rounded'>
                                                                         Preview
-                                                                    </span>
+                                                                    </p>
                                                                 )}
                                                                 <p className='font-medium'>{humanizeDuration(lecture.lectureDuration * 60 * 1000, { units: ['h', 'm'], round: true })}</p>
                                                             </div>
@@ -147,15 +156,23 @@ const CourseDetails = () => {
                 <div className='md:w-1/2 w-full bg-white md:px-20 px-6 py-12 md:py-24 z-10 flex justify-start'>
                     <div className='max-w-md w-full sticky top-28'>
                         <div className='relative overflow-hidden rounded-2xl mb-6 shadow-md border border-gray-100 group'>
-                            <img
+                           {
+                             playerData ?
+                               <YouTube videoId={playerData.videoId} opts={{ playerVars: { autoplay: 1}}} iframeClassName="w-full aspect-video"/>
+                              : <img
                                 src={courseData.courseThumbnail}
                                 alt={courseData.courseTitle}
                                 className='w-full h-auto object-cover transform group-hover:scale-102 transition-transform duration-500'
                             />
+                           }
+                           
+                           
+                            
                         </div>
 
                         <div className='flex items-center gap-2 text-red-600 bg-red-50 px-3.5 py-2.5 rounded-xl text-xs font-semibold mb-5 w-fit shadow-sm border border-red-100/50'>
-                            <img className='w-4 h-4 animate-pulse' src={assets.time_left_clock_icon} alt="time left icon" />
+                          <img className='w-4 h-4 animate-pulse' src={assets.time_left_clock_icon} alt="time left icon" />
+
                             <p><span className='font-bold'>5-Day </span>left at this price</p>
                         </div>
 
