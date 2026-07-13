@@ -54,8 +54,7 @@ const MyEnrollments = () => {
                                 <div className='flex-1'>
                                     <p className='mb-1 max-sm:text-sm'>{course.courseTitle}</p>
                                     <Line strokeWidth={2} percent={progressArray[index] ?
-                                        (progressArray[index].lectureCompleted*100)/progressArray
-                                    [index].totalLectures   : 0 }
+                                        (progressArray[index].lectureCompleted * 100) / progressArray[index].totalLectures : 0}
                                   className='bg-gray-300 rounded-full'/>
                                 </div>
                             </td>

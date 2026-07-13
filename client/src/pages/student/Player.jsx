@@ -5,6 +5,7 @@ import { assets } from '../../assets/assets'
 import humanizeDuration from 'humanize-duration'
 import YouTube from 'react-youtube'
 import Footer from '../../components/student/Footer'
+import Rating from '../../components/student/Rating'
 
 const Player = () => {
 
@@ -67,7 +68,7 @@ const Player = () => {
                             <ul className='list-none p-0 px-6 py-1 border-t border-gray-100 text-gray-600 bg-white divide-y divide-gray-50'>
                                 {chapter.chapterContent.map((lecture, lectureindex) => (
                                     <li key={lectureindex} className='flex items-start gap-3 py-3'>
-                                        <img src={false ? assets.blue_tick_icon : assets.play_icon} alt="play" className='w-4.5 h-4.5 mt-0.5 opacity-70' />
+                                        <img src={assets.play_icon} alt="play" className='w-4.5 h-4.5 mt-0.5 opacity-70' />
                                         <div className='flex-1 flex justify-between items-center'>
                                             <p className='font-medium text-gray-800 text-sm hover:text-blue-600 transition-colors duration-150 cursor-pointer'>{lecture.lectureTitle}</p>
                                             <div className='flex items-center gap-3 text-xs text-gray-500'>
@@ -94,6 +95,7 @@ const Player = () => {
             </div>
             <div className='flex items-center gap-2 py-3 mt-10'>
                 <h1 className='text-xl font-bold'>Rate this Course</h1>
+                <Rating rating ={0}/>
             </div>
             </div>
             {/* right column*/}
@@ -104,7 +106,7 @@ const Player = () => {
                         iframeClassName="w-full aspect-video"/>
                         <div className='flex justify-between items-center mt-1'>
                             <p>{playerData.chapter}.{playerData.lecture} {playerData.lectureTitle}</p>
-                            <button className='text-blue-600'>{false ? 'Completed':'Mark Complete'}</button>
+                            <button className='text-blue-600'>Mark Complete</button>
                         </div>
                     </div>
                 )
