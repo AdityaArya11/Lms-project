@@ -19,7 +19,7 @@ const MyCourses = () => {
         <div className='h-screen flex flex-col justify-between p-4 md:p-8 pt-0'>
             <div className='w-full'>
                 <h2 className='pb-4 text-lg font-medium'>
-                    My Courses 
+                    My Courses
                 </h2>
                 <div className='flex flex-col items-center max-w-4xl w-full overflow-hidden rounded-md border border-gray-200 bg-white'>
                     <table className='md:table-auto table-fixed w-full overflow-hidden text-left'>

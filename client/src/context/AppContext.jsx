@@ -48,16 +48,16 @@ export const AppContextProvider = ({ children }) => {
     };
 
     //Fetch enrolled courses
-    const fetchUserEnrolledCourses =async () =>{
+    const fetchUserEnrolledCourses = async () => {
         setEnrolledCourses(dummyCourses)
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         fetchAllCourses()
         fetchUserEnrolledCourses()
-    },[])
-        
-    
+    }, [])
+
+
 
 
     const calculateCourseDuration = (course) => {

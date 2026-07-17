@@ -8,11 +8,11 @@ const Dashboard = () => {
     const { currency } = useContext(AppContext)
     const navigate = useNavigate()
     const [dashBoardData, setDashBoardData] = useState(null)
-    
+
     const fetchDashboardData = async () => {
         setDashBoardData(dummyDashboardData)
     }
-    
+
     useEffect(() => {
         fetchDashboardData()
     }, [])
@@ -27,7 +27,7 @@ const Dashboard = () => {
                         <p className='text-sm text-gray-500 font-medium'>Total Courses</p>
                     </div>
                 </div>
-                
+
                 <div className='flex items-center gap-4 bg-white border border-gray-200/80 p-6 rounded-2xl shadow-sm min-w-[240px] flex-1'>
                     <img src={assets.patients_icon} alt="patients_icon" className='w-12 h-12' />
                     <div>
@@ -35,7 +35,7 @@ const Dashboard = () => {
                         <p className='text-sm text-gray-500 font-medium'>Total Students</p>
                     </div>
                 </div>
-                
+
                 <div className='flex items-center gap-4 bg-white border border-gray-200/80 p-6 rounded-2xl shadow-sm min-w-[240px] flex-1'>
                     <img src={assets.earning_icon} alt="earning_icon" className='w-12 h-12' />
                     <div>
@@ -44,7 +44,7 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
-            
+
             <div className='w-full'>
                 <h2 className='text-lg font-bold text-gray-800 mb-4'>Latest Enrollments</h2>
                 <div className='bg-white border border-gray-200/80 rounded-2xl overflow-hidden shadow-sm'>
