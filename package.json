@@ -1,4 +1,10 @@
 {
+  "name": "lms-project-root",
+  "version": "1.0.0",
+  "scripts": {
+    "server": "npm run server --prefix server",
+    "client": "npm run dev --prefix client"
+  },
   "dependencies": {
     "@clerk/clerk-react": "^5.61.8"
   }
