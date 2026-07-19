@@ -4,7 +4,7 @@ import User from "../models/user.js";
 //API controller fn to manage clerk user with database
 const clerkWebhook = async (req, res) => {
     try {
-        if (!process.env.CLERK_WEBHOOK_SECRET) {
+        if (!process.env.CLERK_WEBHOOK_SECRET || process.env.CLERK_WEBHOOK_SECRET === 'placeholder') {
             console.warn("CLERK_WEBHOOK_SECRET is not set. Bypassing verification.");
             return res.json({ success: true, message: "Webhook secret missing, bypassed verification." });
         }
