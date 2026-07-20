@@ -10,13 +10,13 @@ export const clerkWebhooks = async (req, res) => {
         // }
 
         const whook = new Webhook(process.env.CLERK_WEBHOOK_SECRET)
-        
-     await   whook.verify(JSON.stringify(req.body), {
-          'svix-id': req.headers['svix-id'],
-           
-           
+
+        await whook.verify(JSON.stringify(req.body), {
+            'svix-id': req.headers['svix-id'],
+
+
             'svix-timestamp': req.headers['svix-timestamp'],
-             'svix-signature': req.headers['svix-signature']
+            'svix-signature': req.headers['svix-signature']
         })
 
         const { data, type } = req.body
@@ -24,8 +24,8 @@ export const clerkWebhooks = async (req, res) => {
             case 'user.created': {
                 const userData = {
                     _id: data.id,
-                     email: data.email_addresses[0].email_address,
-                    name: data.first_name + " "+ data.last_name ,
+                    email: data.email_addresses[0].email_address,
+                    name: data.first_name + " " + data.last_name,
                     imageURL: data.image_url,
                 }
                 await User.create(userData)
@@ -34,8 +34,8 @@ export const clerkWebhooks = async (req, res) => {
             }
             case 'user.updated': {
                 const userData = {
-                     email: data.email_addresses[0].email_address,
-                     name: data.first_name + " "+ data.last_name ,
+                    email: data.email_addresses[0].email_address,
+                    name: data.first_name + " " + data.last_name,
                     imageURL: data.image_url
                 }
                 await User.findByIdAndUpdate(data.id, userData)
@@ -55,3 +55,4 @@ export const clerkWebhooks = async (req, res) => {
         res.json({ success: false, message: error.message })
     }
 }
+
