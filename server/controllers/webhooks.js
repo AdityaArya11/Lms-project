@@ -2,12 +2,11 @@ import { Webhook } from "svix";
 import User from "../models/user.js";
 
 //API controller fn to manage clerk user with database
+
 export const clerkWebhooks = async (req, res) => {
+    console.log("Webhook received");
     try {
-        // if (!process.env.CLERK_WEBHOOK_SECRET || process.env.CLERK_WEBHOOK_SECRET === 'placeholder') {
-        //     console.warn("CLERK_WEBHOOK_SECRET is not set. Bypassing verification.");
-        //     return res.json({ success: true, message: "Webhook secret missing, bypassed verification." });
-        // }
+    
 
         const whook = new Webhook(process.env.CLERK_WEBHOOK_SECRET)
 
@@ -52,7 +51,10 @@ export const clerkWebhooks = async (req, res) => {
         }
 
     } catch (error) {
-        res.json({ success: false, message: error.message })
+       console.error(error);
+    res.status(500).json({
+        success: false,
+        message: error.message
+    })
     }
 }
-
