@@ -96,7 +96,8 @@ export const AppContextProvider = ({ children }) => {
         isEducator,
         setIsEducator,
         enrolledCourses,
-        fetchUserEnrolledCourses
+        fetchUserEnrolledCourses,
+        getToken
     };
 
     return (
