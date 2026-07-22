@@ -100,8 +100,9 @@ export const stripeWebhooks = async (req, res) => {
                 $addToSet: { enrolledCourses: actualCourseId }
             });
 
-            purchaseData.status = 'completed';
-            await purchaseData.save();
+            await Purchase.findByIdAndUpdate(purchaseId, {
+                status: 'completed'
+            });
             console.log(`Purchase ${purchaseId} successfully completed!`);
         }
     };
