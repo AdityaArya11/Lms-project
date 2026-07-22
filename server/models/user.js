@@ -12,4 +12,5 @@ const userSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 const User = mongoose.model('User', userSchema);
+console.log("User imageUrl schema options:", User.schema.path("imageUrl").options);
 export default User;
