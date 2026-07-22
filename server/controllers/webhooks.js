@@ -61,18 +61,14 @@ export const clerkWebhooks = async (req, res) => {
 // Stripe Webhooks controller function to manage payment status
 export const stripeWebhooks = async (req, res) => {
     console.log("========== STRIPE WEBHOOK HIT ==========");
-    console.log("ENV CHECK");
-    console.log("All env keys available:", Object.keys(process.env));
-    console.log("STRIPE_SECRET_KEY exists:", !!process.env.STRIPE_SECRET_KEY);
+    console.log("All Stripe env vars:");
     console.log(
-      "Prefix:",
-      process.env.STRIPE_SECRET_KEY?.substring(0, 7)
+      Object.fromEntries(
+        Object.entries(process.env).filter(([key]) =>
+          key.includes("STRIPE")
+        )
+      )
     );
-    console.log("Project env keys:");
-    console.log(
-      Object.keys(process.env).filter(k => k.startsWith("STRIPE"))
-    );
-    console.log("Secret:", process.env.STRIPE_SECRET_KEY);
 
     const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY);
     const sig = req.headers['stripe-signature'];
