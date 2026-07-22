@@ -62,6 +62,7 @@ export const clerkWebhooks = async (req, res) => {
 export const stripeWebhooks = async (req, res) => {
     console.log("========== STRIPE WEBHOOK HIT ==========");
     console.log("ENV CHECK");
+    console.log("All env keys available:", Object.keys(process.env));
     console.log("STRIPE_SECRET_KEY exists:", !!process.env.STRIPE_SECRET_KEY);
     console.log(
       "Prefix:",
