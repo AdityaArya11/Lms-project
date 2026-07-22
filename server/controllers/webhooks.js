@@ -60,6 +60,14 @@ export const clerkWebhooks = async (req, res) => {
 
 // Stripe Webhooks controller function to manage payment status
 export const stripeWebhooks = async (req, res) => {
+    console.log("========== STRIPE WEBHOOK HIT ==========");
+    console.log("ENV CHECK");
+    console.log("STRIPE_SECRET_KEY exists:", !!process.env.STRIPE_SECRET_KEY);
+    console.log(
+      "Prefix:",
+      process.env.STRIPE_SECRET_KEY?.substring(0, 7)
+    );
+
     const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY);
     const sig = req.headers['stripe-signature'];
 
@@ -72,22 +80,19 @@ export const stripeWebhooks = async (req, res) => {
             process.env.STRIPE_WEBHOOK_SECRET
         );
     } catch (err) {
+        console.error("Stripe Webhook Verification Error:", err.message);
         return res.status(400).send(`Webhook Error: ${err.message}`);
     }
 
+    console.log("Event:", event.type);
+
     // Handle the event
     switch (event.type) {
-        case 'payment_intent.succeeded': {
-            const paymentIntent = event.data.object;
-            const paymentIntentId = paymentIntent.id;
+        case 'checkout.session.completed': {
+            const session = event.data.object;
+            const { purchaseId } = session.metadata || {};
 
-            const session = await stripeInstance.checkout.sessions.list({
-                payment_intent: paymentIntentId
-            });
-
-            if (session && session.data.length > 0) {
-                const { purchaseId } = session.data[0].metadata;
-
+            if (purchaseId) {
                 const purchaseData = await Purchase.findById(purchaseId);
                 if (purchaseData) {
                     const actualUserId = purchaseData.userId || purchaseData.userID;
@@ -109,6 +114,43 @@ export const stripeWebhooks = async (req, res) => {
                     await purchaseData.save();
                 }
             }
+            break;
+        }
+
+        case 'payment_intent.succeeded': {
+            const paymentIntent = event.data.object;
+            const paymentIntentId = paymentIntent.id;
+
+            const session = await stripeInstance.checkout.sessions.list({
+                payment_intent: paymentIntentId
+            });
+
+            if (session && session.data.length > 0) {
+                const { purchaseId } = session.data[0].metadata || {};
+
+                if (purchaseId) {
+                    const purchaseData = await Purchase.findById(purchaseId);
+                    if (purchaseData) {
+                        const actualUserId = purchaseData.userId || purchaseData.userID;
+                        const actualCourseId = purchaseData.courseId || purchaseData.courseID;
+
+                        const courseData = await Course.findById(actualCourseId);
+                        if (courseData && !courseData.enrolledStudents.includes(actualUserId)) {
+                            courseData.enrolledStudents.push(actualUserId);
+                            await courseData.save();
+                        }
+
+                        const userData = await User.findById(actualUserId);
+                        if (userData && !userData.enrolledCourses.includes(actualCourseId)) {
+                            userData.enrolledCourses.push(actualCourseId);
+                            await userData.save();
+                        }
+
+                        purchaseData.status = 'completed';
+                        await purchaseData.save();
+                    }
+                }
+            }
 
             break;
         }
@@ -122,12 +164,13 @@ export const stripeWebhooks = async (req, res) => {
             });
 
             if (session && session.data.length > 0) {
-                const { purchaseId } = session.data[0].metadata;
-                const purchaseData = await Purchase.findById(purchaseId);
-
-                if (purchaseData) {
-                    purchaseData.status = 'failed';
-                    await purchaseData.save();
+                const { purchaseId } = session.data[0].metadata || {};
+                if (purchaseId) {
+                    const purchaseData = await Purchase.findById(purchaseId);
+                    if (purchaseData) {
+                        purchaseData.status = 'failed';
+                        await purchaseData.save();
+                    }
                 }
             }
 
