@@ -67,6 +67,11 @@ export const stripeWebhooks = async (req, res) => {
       "Prefix:",
       process.env.STRIPE_SECRET_KEY?.substring(0, 7)
     );
+    console.log("Project env keys:");
+    console.log(
+      Object.keys(process.env).filter(k => k.startsWith("STRIPE"))
+    );
+    console.log("Secret:", process.env.STRIPE_SECRET_KEY);
 
     const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY);
     const sig = req.headers['stripe-signature'];
