@@ -23,8 +23,8 @@ export const clerkWebhooks = async (req, res) => {
                     _id: data.id,
                     email: data.email_addresses[0].email_address,
                     name: data.first_name + " " + data.last_name,
-                    imageUrl: data.image_url,
-                    imageURL: data.image_url,
+                    imageUrl: data.image_url || '',
+                    imageURL: data.image_url || '',
                 };
                 await User.create(userData);
                 res.json({});
@@ -34,8 +34,8 @@ export const clerkWebhooks = async (req, res) => {
                 const userData = {
                     email: data.email_addresses[0].email_address,
                     name: data.first_name + " " + data.last_name,
-                    imageUrl: data.image_url,
-                    imageURL: data.image_url
+                    imageUrl: data.image_url || '',
+                    imageURL: data.image_url || ''
                 };
                 await User.findByIdAndUpdate(data.id, userData);
                 res.json({});
@@ -61,18 +61,11 @@ export const clerkWebhooks = async (req, res) => {
 // Stripe Webhooks controller function to manage payment status
 export const stripeWebhooks = async (req, res) => {
     console.log("========== STRIPE WEBHOOK HIT ==========");
-    console.log("ENV CHECK");
-    console.log("All env keys available:", Object.keys(process.env));
+    console.log("DEPLOY:", process.env.VERCEL_DEPLOYMENT_ID);
     console.log("STRIPE_SECRET_KEY exists:", !!process.env.STRIPE_SECRET_KEY);
-    console.log(
-      "Prefix:",
-      process.env.STRIPE_SECRET_KEY?.substring(0, 7)
-    );
-    console.log("Project env keys:");
-    console.log(
-      Object.keys(process.env).filter(k => k.startsWith("STRIPE"))
-    );
-    console.log("Secret:", process.env.STRIPE_SECRET_KEY);
+    console.log("Project:", process.env.VERCEL_PROJECT_NAME);
+    console.log("Deployment:", process.env.VERCEL_DEPLOYMENT_ID);
+    console.log("Environment:", process.env.VERCEL_ENV);
 
     const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY);
     const sig = req.headers['stripe-signature'];
@@ -92,33 +85,35 @@ export const stripeWebhooks = async (req, res) => {
 
     console.log("Event:", event.type);
 
+    // Helper to process completed purchase safely
+    const processCompletedPurchase = async (purchaseId) => {
+        const purchaseData = await Purchase.findById(purchaseId);
+        if (purchaseData) {
+            const actualUserId = purchaseData.userId || purchaseData.userID;
+            const actualCourseId = purchaseData.courseId || purchaseData.courseID;
+
+            await Course.findByIdAndUpdate(actualCourseId, {
+                $addToSet: { enrolledStudents: actualUserId }
+            });
+
+            await User.findByIdAndUpdate(actualUserId, {
+                $addToSet: { enrolledCourses: actualCourseId }
+            });
+
+            await Purchase.findByIdAndUpdate(purchaseId, {
+                status: 'completed'
+            });
+            console.log(`Purchase ${purchaseId} successfully completed!`);
+        }
+    };
+
     // Handle the event
     switch (event.type) {
         case 'checkout.session.completed': {
             const session = event.data.object;
             const { purchaseId } = session.metadata || {};
-
             if (purchaseId) {
-                const purchaseData = await Purchase.findById(purchaseId);
-                if (purchaseData) {
-                    const actualUserId = purchaseData.userId || purchaseData.userID;
-                    const actualCourseId = purchaseData.courseId || purchaseData.courseID;
-
-                    const courseData = await Course.findById(actualCourseId);
-                    if (courseData && !courseData.enrolledStudents.includes(actualUserId)) {
-                        courseData.enrolledStudents.push(actualUserId);
-                        await courseData.save();
-                    }
-
-                    const userData = await User.findById(actualUserId);
-                    if (userData && !userData.enrolledCourses.includes(actualCourseId)) {
-                        userData.enrolledCourses.push(actualCourseId);
-                        await userData.save();
-                    }
-
-                    purchaseData.status = 'completed';
-                    await purchaseData.save();
-                }
+                await processCompletedPurchase(purchaseId);
             }
             break;
         }
@@ -133,28 +128,8 @@ export const stripeWebhooks = async (req, res) => {
 
             if (session && session.data.length > 0) {
                 const { purchaseId } = session.data[0].metadata || {};
-
                 if (purchaseId) {
-                    const purchaseData = await Purchase.findById(purchaseId);
-                    if (purchaseData) {
-                        const actualUserId = purchaseData.userId || purchaseData.userID;
-                        const actualCourseId = purchaseData.courseId || purchaseData.courseID;
-
-                        const courseData = await Course.findById(actualCourseId);
-                        if (courseData && !courseData.enrolledStudents.includes(actualUserId)) {
-                            courseData.enrolledStudents.push(actualUserId);
-                            await courseData.save();
-                        }
-
-                        const userData = await User.findById(actualUserId);
-                        if (userData && !userData.enrolledCourses.includes(actualCourseId)) {
-                            userData.enrolledCourses.push(actualCourseId);
-                            await userData.save();
-                        }
-
-                        purchaseData.status = 'completed';
-                        await purchaseData.save();
-                    }
+                    await processCompletedPurchase(purchaseId);
                 }
             }
 
@@ -172,11 +147,7 @@ export const stripeWebhooks = async (req, res) => {
             if (session && session.data.length > 0) {
                 const { purchaseId } = session.data[0].metadata || {};
                 if (purchaseId) {
-                    const purchaseData = await Purchase.findById(purchaseId);
-                    if (purchaseData) {
-                        purchaseData.status = 'failed';
-                        await purchaseData.save();
-                    }
+                    await Purchase.findByIdAndUpdate(purchaseId, { status: 'failed' });
                 }
             }
 

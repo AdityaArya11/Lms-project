@@ -32,6 +32,7 @@ export const updateRoleToEducator = async (req, res) => {
 };
 
 // Add new course
+
 export const addCourse = async (req, res) => {
     try {
         const { courseData } = req.body;
@@ -76,7 +77,7 @@ export const addCourse = async (req, res) => {
         });
     }
 };
-
+//dummy commit
 // Get Educator Courses
 export const getEducatorCourses = async (req, res) => {
     try {
