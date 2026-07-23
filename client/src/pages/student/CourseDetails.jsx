@@ -172,7 +172,6 @@ const CourseDetails = () => {
 
                         <div className='flex items-center gap-2 text-red-600 bg-red-50 px-3.5 py-2.5 rounded-xl text-xs font-semibold mb-5 w-fit shadow-sm border border-red-100/50'>
                           <img className='w-4 h-4 animate-pulse' src={assets.time_left_clock_icon} alt="time left icon" />
-
                             <p><span className='font-bold'>5-Day </span>left at this price</p>
                         </div>
 
