@@ -2,12 +2,14 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { AppContext } from '../../context/AppContext';
 import Loading from '../../components/student/Loading';
+import axios from 'axios';
 
 import { assets } from '../../assets/assets';
 import humanizeDuration from 'humanize-duration';
 import Rating from '../../components/student/Rating';
 import Footer from '../../components/student/Footer';
 import YouTube from 'react-youtube';
+import { toast } from 'react-toastify';
 
 const CourseDetails = () => {
 
@@ -19,17 +21,62 @@ const CourseDetails = () => {
     const [playerData, setPlayerData] = useState(null)
 
 
-    const { allCourses, calculateRating, calculateNoOfLectures, calculateChapterTime, calculateCourseDuration, currency } = useContext(AppContext)
+    const { allCourses, calculateRating, calculateNoOfLectures, calculateChapterTime, calculateCourseDuration, currency,
+        backendUrl, userData, getToken } = useContext(AppContext)
 
     const fetchCourseData = async () => {
-        const findCourse = allCourses.find(course => course._id == id)
-        setCourseData(findCourse);
+       try{
+        const {data} = await axios.get(backendUrl + `/api/course/` + id)
+
+        if(data.success){
+            setCourseData(data.courseData)
+        }else{
+            toast.error(data.message)
+        }
+
+       }catch (error){
+        toast.error(error.message)
+
+       }
+    }
+
+
+    const enrollCourse = async () => {
+        try {
+            if(!userData){
+                return toast.warn('Login to Enroll')
+            }
+            if(isAllreadyEnrolled){
+                return toast.warn('Already Enrolled')
+            }
+
+            const token = await getToken();
+
+            const { data } = await axios.post(backendUrl + '/api/user/purchase', { courseId: courseData._id }, { headers: { Authorization: `Bearer ${token}` } })
+
+            if(data.success){
+                const {session_url} = data
+                window.location.replace(session_url)
+            }else{
+                toast.error(data.message)
+            }
+            
+        } catch (error){
+           toast.error(error.message)
+        }
     }
 
 
     useEffect(() => {
         fetchCourseData()
-    }, [allCourses, id])
+    }, [])
+
+      useEffect(() => {
+        if(userData && courseData)
+        {
+            setIsAllreadyEnrolled(userData.enrolledCourses.includes(courseData._id))
+        }
+    }, [userData ,courseData])
 
     const averageRating = courseData ? calculateRating(courseData) : 0
     const discountedPrice = courseData ? (courseData.coursePrice - (courseData.coursePrice * courseData.discount) / 100).toFixed(2) : 0
@@ -83,7 +130,7 @@ const CourseDetails = () => {
                         </div>
 
                         <p className='text-sm text-gray-700 mt-2'>
-                            <b>Course created by</b> <span className='font-semibold text-blue-600 hover:underline cursor-pointer'>Aditya Arya</span>
+                            <b>Course created by</b> <span className='font-semibold text-blue-600 hover:underline cursor-pointer'>{courseData.educator.name}</span>
                         </p>
 
                         <div className='pt-10 text-gray-800 w-full'>
@@ -215,7 +262,7 @@ const CourseDetails = () => {
                             </div>
                         </div>
 
-                        <button className='w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 rounded-2xl text-base font-bold hover:from-blue-700 hover:to-indigo-700 hover:-translate-y-0.5 transition-all duration-200 shadow-md hover:shadow-lg active:scale-98 active:translate-y-0'>
+                        <button onClick={enrollCourse} className='w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 rounded-2xl text-base font-bold hover:from-blue-700 hover:to-indigo-700 hover:-translate-y-0.5 transition-all duration-200 shadow-md hover:shadow-lg active:scale-98 active:translate-y-0'>
                             {!isAllreadyEnrolled ? "Enroll Now" : "Go To Course"}
                         </button>
 

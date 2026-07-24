@@ -60,7 +60,7 @@ export const AppContextProvider = ({ children }) => {
                 }
                 
         } catch (error) {
-            toast.error(data.message)
+            toast.error(error.message)
         }
     }
 

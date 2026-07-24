@@ -4,10 +4,11 @@ import { Link } from "react-router-dom";
 import { useClerk, UserButton, useUser } from "@clerk/clerk-react";
 import { AppContext } from "../../context/AppContext";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
 
-  const { navigate, isEducator, backendUrl, setIseducator,getToken } = useContext(AppContext);
+  const { navigate, isEducator, backendUrl, setIsEducator, getToken } = useContext(AppContext);
   const isCourseListPage = location.pathname.includes("/course-list");
 
   const { openSignIn } = useClerk();
@@ -27,7 +28,7 @@ const Navbar = () => {
       })
 
       if (data.success){
-        setIseducator(true)
+        setIsEducator(true)
         toast.success(data.message)
       }
       else{
