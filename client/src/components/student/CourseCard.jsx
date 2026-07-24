@@ -29,7 +29,7 @@ const CourseCard = ({ course }) => {
                     {course.courseTitle}
                 </h3>
                 <p className='text-xs text-gray-500 mb-3'>
-                    By {typeof course.educator === 'object' ? course.educator.name : "Aditya Arya"}
+                   {course.educator.name}
                 </p>
                 <div className='flex items-center gap-1.5 mb-4'>
                     <span className='text-sm font-medium text-amber-500'>{averageRating.toFixed(1)}</span>
