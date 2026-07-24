@@ -6,7 +6,7 @@ import { AppContext } from "../../context/AppContext";
 
 const Navbar = () => {
 
-  const { navigate, isEducator } = useContext(AppContext);
+  const { navigate, isEducator,  } = useContext(AppContext);
   const isCourseListPage = location.pathname.includes("/course-list");
 
   const { openSignIn } = useClerk();
