@@ -16,26 +16,24 @@ export const AppContextProvider = ({ children }) => {
     const navigate = useNavigate()
      const {getToken} = useAuth()
      const{user} = useUser()
-    const [allCourses, setAllCourses] = useState([]);
+    const [allCourses, setAllCourses] = useState(dummyCourses);
     const [isEducator, setIsEducator] = useState(false);
     const [enrolledCourses, setEnrolledCourses] = useState([]);
     const [userData, setUserData] = useState(null);
-    
-
 
     const fetchAllCourses = async () => {
-            try{
-              const {data} =  await axios.get(backendUrl + '/api/course/all');
-              
-              if(data.success){
-                setAllCourses(data.courses)
-              }else{
-                toast.error(data.message)
-              }
-            } catch (error){
-              toast.error(error.message)
-              
+        try {
+            const { data } = await axios.get(backendUrl + '/api/course/all');
+
+            if (data.success && data.courses && data.courses.length > 0) {
+                setAllCourses(data.courses);
+            } else {
+                setAllCourses(dummyCourses);
+                if (data.message) toast.error(data.message);
             }
+        } catch (error) {
+            setAllCourses(dummyCourses);
+        }
     };
 
     //fetch user data
@@ -49,6 +47,7 @@ export const AppContextProvider = ({ children }) => {
     
         try {
             const token = await getToken();
+            console.log("Clerk Auth Token:", token);
 
             const {data} = await axios.get(backendUrl +'/api/user/data',{headers:
                 {Authorization:`Bearer ${token}`}})
@@ -113,18 +112,11 @@ export const AppContextProvider = ({ children }) => {
     }
 
     useEffect(() => {
-        fetchAllCourses()
-       
-    }, [])
-
-       
-        
-        useEffect(()=>{
-            if(user){
-                fetchUserData() 
-                 fetchUserEnrolledCourses()
-            }
-        },[user])
+        if (user) {
+            fetchUserData()
+            fetchUserEnrolledCourses()
+        }
+    }, [user])
 
 
 
