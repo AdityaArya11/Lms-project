@@ -10,8 +10,8 @@ export const AppContext = createContext();
 
 export const AppContextProvider = ({ children }) => {
      
-    const backendUrl = import.meta.env.VITE_BACKEND_URL
-    const currency = import.meta.env.VITE_CURRENCY
+    const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5001'
+    const currency = import.meta.env.VITE_CURRENCY || '$'
     const navigate = useNavigate()
      const {getToken} = useAuth()
      const{user} = useUser()
@@ -22,14 +22,16 @@ export const AppContextProvider = ({ children }) => {
 
     const fetchAllCourses = async () => {
         try {
-            const { data } = await axios.get(backendUrl + '/api/course/all');
+            const url = `${backendUrl}/api/course/all`;
+            const { data } = await axios.get(url);
 
-            if (data.success) {
-                setAllCourses(data.courses);
-            } else {
-                toast.error(data.message);
+            if (data && data.success) {
+                setAllCourses(data.courses || []);
+            } else if (data) {
+                toast.error(data.message || 'Failed to load courses');
             }
         } catch (error) {
+            console.error("Error fetching all courses:", error);
             toast.error(error.message);
         }
     };

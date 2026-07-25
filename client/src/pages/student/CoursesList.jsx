@@ -13,55 +13,70 @@ const CoursesList = () => {
     const [filteredCourse, setFilteredCourse] = useState([])
 
     useEffect(() => {
-        if (allCourses && allCourses.length > 0) {
-            const tempCourses = allCourses.slice()
-
-            input ?
+        if (Array.isArray(allCourses)) {
+            const tempCourses = [...allCourses];
+            if (input) {
                 setFilteredCourse(
                     tempCourses.filter(
-                        item => item.courseTitle.toLowerCase().includes(input.toLocaleLowerCase())
+                        item => item.courseTitle && item.courseTitle.toLowerCase().includes(input.toLowerCase())
                     )
-                )
-                : setFilteredCourse(tempCourses)
+                );
+            } else {
+                setFilteredCourse(tempCourses);
+            }
         }
-
-    }, [allCourses, input])
-
+    }, [allCourses, input]);
 
     return (
-
         <>
-            <div className='relative md:px-36 px-8 pt-20 text-left'>
-                <div className='flex md:flex-row flex-col gap-6 items-start justify-between
-                w-full'>
-
+            <div className='relative md:px-24 px-6 pt-12 text-left max-w-7xl mx-auto min-h-[70vh]'>
+                <div className='flex md:flex-row flex-col gap-6 items-start justify-between w-full mb-8'>
                     <div>
-                        <h1 className='text-4xl font-semibold text-gray-800'>Course List</h1>
-                        <p className='text-grey-500'>
-                            <span className='text-blue-600 cursor-pointer'
-                                onClick={() => navigate('/')}>Home</span>/<span>Course List</span></p>
+                        <h1 className='text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight'>Course Catalog</h1>
+                        <p className='text-slate-500 text-sm mt-1'>
+                            <span className='text-blue-600 cursor-pointer font-medium hover:underline'
+                                onClick={() => navigate('/')}>Home</span> / <span className='font-medium text-slate-700'>Courses</span>
+                        </p>
                     </div>
                     <SearchBar data={input} />
                 </div>
-                {input && <div className='inline-flex items-center gap-4 px-4 py-2 border mt-8
-               -mb-8 text-gray-600'>
-                    <p>{input}</p>
-                    <img src={assets.cross_icon} alt="" className='curson-pointer' onClick={() =>
-                        navigate('/course-list')
-                    } />
-                </div>
 
-                }
+                {input && (
+                    <div className='inline-flex items-center gap-3 px-3.5 py-1.5 bg-slate-100 border border-slate-200 rounded-full text-slate-700 text-xs font-semibold mb-6'>
+                        <span>Search: "{input}"</span>
+                        <button 
+                            onClick={() => navigate('/course-list')}
+                            className="text-slate-400 hover:text-slate-700 text-xs font-bold cursor-pointer"
+                        >
+                            ✕
+                        </button>
+                    </div>
+                )}
 
-
-                <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4
-                 my-16 gap-3 px-2 md:p-0'>
-                    {filteredCourse.map((course, index) => <CourseCard key={index} course={course} />)}
-                </div>
+                {filteredCourse.length > 0 ? (
+                    <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 my-8 gap-7'>
+                        {filteredCourse.map((course, index) => <CourseCard key={index} course={course} />)}
+                    </div>
+                ) : (
+                    <div className="bg-white border border-slate-200/80 rounded-2xl p-12 text-center shadow-xs my-8 space-y-4 max-w-md mx-auto">
+                        <span className="text-4xl">🔍</span>
+                        <h3 className="text-lg font-bold text-slate-800">No Courses Found</h3>
+                        <p className="text-sm text-slate-500">
+                            {input ? `No courses matching "${input}". Try searching for something else.` : 'No courses available at the moment. Please check back soon!'}
+                        </p>
+                        {input && (
+                            <button 
+                                onClick={() => navigate('/course-list')} 
+                                className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-5 py-2.5 rounded-full transition-all cursor-pointer shadow-xs"
+                            >
+                                View All Courses
+                            </button>
+                        )}
+                    </div>
+                )}
             </div>
             <Footer />
         </>
-
     )
 }
 

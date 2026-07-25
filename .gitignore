@@ -9,3 +9,13 @@ server/.env
 .vscode/
 rag-ai-tutor/
 
+# AI Tutor Modules & Components
+client/src/components/student/AiTutorDrawer.jsx
+client/src/components/student/AiFeaturesSection.jsx
+**/AiTutorDrawer.jsx
+**/AiFeaturesSection.jsx
+server/models/courseVector.js
+server/models/chatHistory.js
+server/services/ragService.js
+server/controllers/ragController.js
+server/routes/ragRoutes.js

@@ -42,7 +42,7 @@ const Navbar = () => {
   }
   return (
     <div
-      className={`flex items-center justify-between px-4 sm:px-10 md:px-14 lg:px-36 border-b border-gray-500 py-4 ${isCourseListPage ? "bg-white" : "bg-cyan-100/70"}`}
+      className="sticky top-0 z-40 flex items-center justify-between px-4 sm:px-10 md:px-14 lg:px-36 border-b border-slate-300/70 py-3.5 bg-slate-100/90 backdrop-blur-lg shadow-xs transition-all duration-300"
     >
       <img
         onClick={() => {
@@ -51,46 +51,66 @@ const Navbar = () => {
         }}
         src={assets.logo}
         alt="Logo"
-        className="w-28 lg:w-32 cursor-pointer"
+        className="w-28 lg:w-32 cursor-pointer hover:opacity-90 transition-opacity"
       />
 
-      <div className="hidden md:flex items-center gap-5 text-gray-500">
-        <div className="flex items-center gap-5">
+      <div className="hidden md:flex items-center gap-6 text-slate-600 font-medium text-sm">
+        <div className="flex items-center gap-4">
           {user && (
             <>
-              <button onClick={becomeEducator}>{isEducator ? 'Educator Dashboard' : 'Become Educator'}</button>|{" "}
-              <Link to="/my-enrollments">My Enrollments</Link>
+              <button 
+                onClick={becomeEducator}
+                className="hover:text-blue-600 transition-colors cursor-pointer px-3 py-1.5 rounded-lg hover:bg-slate-100/70"
+              >
+                {isEducator ? 'Educator Dashboard' : 'Become Educator'}
+              </button>
+              <span className="text-slate-300">|</span>
+              <Link 
+                to="/my-enrollments"
+                className="hover:text-blue-600 transition-colors cursor-pointer px-3 py-1.5 rounded-lg hover:bg-slate-100/70"
+              >
+                My Enrollments
+              </Link>
             </>
           )}
         </div>
         {user ? (
-          <UserButton />
+          <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
+            <UserButton />
+          </div>
         ) : (
           <button
             onClick={() => openSignIn()}
-            className="bg-blue-600 text-white px-5 py-2 rounded-full"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2 rounded-full shadow-sm hover:shadow transition-all duration-200 cursor-pointer"
           >
             Create Account
           </button>
         )}
       </div>
 
-      {/*for Phone screen*/}
-
-      <div className="md:hidden flex items-center gap-2 sm:gap-5 text-gray-500">
-        <div className="flex items-center gap-1 sm:gap-2 max-sm:text-xs">
+      {/* Mobile view */}
+      <div className="md:hidden flex items-center gap-3 text-slate-600">
+        <div className="flex items-center gap-2 text-xs font-medium">
           {user && (
             <>
-              <button onClick={becomeEducator}>{isEducator ? 'Educator Dashboard' : 'Become Educator'}</button>|{" "}
-              <Link to="/my-enrollments">My Enrollments</Link>
+              <button onClick={becomeEducator} className="hover:text-blue-600">
+                {isEducator ? 'Educator' : 'Teach'}
+              </button>
+              <span className="text-slate-300">|</span>
+              <Link to="/my-enrollments" className="hover:text-blue-600">
+                Enrollments
+              </Link>
             </>
           )}
         </div>
         {user ? (
           <UserButton />
         ) : (
-          <button onClick={() => openSignIn()}>
-            <img src={assets.user_icon} alt="" />{" "}
+          <button 
+            onClick={() => openSignIn()}
+            className="bg-blue-600 text-white p-2 rounded-full shadow-sm"
+          >
+            <img src={assets.user_icon} alt="user" className="w-4 h-4 invert" />
           </button>
         )}
       </div>

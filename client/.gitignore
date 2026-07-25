@@ -31,3 +31,9 @@ node_modules/
 *.njsproj
 *.sln
 *.sw?
+
+# AI Components
+src/components/student/AiTutorDrawer.jsx
+src/components/student/AiFeaturesSection.jsx
+**/AiTutorDrawer.jsx
+**/AiFeaturesSection.jsx
