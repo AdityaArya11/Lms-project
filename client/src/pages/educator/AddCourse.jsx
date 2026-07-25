@@ -3,7 +3,6 @@ import uniqid from 'uniqid'
 import Quill from 'quill'
 import 'quill/dist/quill.snow.css'
 import { assets } from '../../assets/assets'
-import { backendUrl } from '../../config';
 import axios from 'axios';
 import { AppContext } from '../../context/AppContext';
 import { toast } from 'react-toastify'
@@ -95,7 +94,7 @@ const AddCourse = () => {
         )
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         try{
             e.preventDefault();
             if(!image){
