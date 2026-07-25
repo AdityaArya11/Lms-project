@@ -22,7 +22,7 @@ const CourseDetails = () => {
 
 
     const { allCourses, calculateRating, calculateNoOfLectures, calculateChapterTime, calculateCourseDuration, currency,
-        backendUrl, userData, getToken } = useContext(AppContext)
+        backendUrl, userData, getToken, navigate } = useContext(AppContext)
 
     const fetchCourseData = async () => {
        try{
@@ -47,7 +47,9 @@ const CourseDetails = () => {
                 return toast.warn('Login to Enroll')
             }
             if(isAllreadyEnrolled){
-                return toast.warn('Already Enrolled')
+                navigate(`/player/${courseData._id}`)
+                scrollTo(0, 0)
+                return;
             }
 
             const token = await getToken();
