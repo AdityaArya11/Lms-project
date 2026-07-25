@@ -1,0 +1,21 @@
+<svg viewBox="0 0 460 130" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Elevate Edu logo">
+  <defs>
+    <linearGradient id="ascendGrad" x1="0" y1="110" x2="0" y2="10" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2563EB"/>
+      <stop offset="55%" stop-color="#38BDF8"/>
+      <stop offset="100%" stop-color="#22D3EE"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Icon: ascending bars + arrow tip = "elevate" -->
+  <g>
+    <rect x="22" y="82" width="16" height="28" rx="5" fill="url(#ascendGrad)"/>
+    <rect x="44" y="64" width="16" height="46" rx="5" fill="url(#ascendGrad)"/>
+    <rect x="66" y="46" width="16" height="64" rx="5" fill="url(#ascendGrad)"/>
+    <rect x="88" y="28" width="16" height="82" rx="5" fill="url(#ascendGrad)"/>
+    <path d="M 85 28 L 96 9 L 107 28 Z" fill="#22D3EE"/>
+  </g>
+
+  <!-- Wordmark -->
+  <text x="130" y="88" font-family="'Poppins','Segoe UI',Arial,sans-serif" font-size="54" font-weight="800" letter-spacing="-1" fill="#1D4ED8">elevate<tspan fill="#06B6D4">.edu</tspan></text>
+</svg>

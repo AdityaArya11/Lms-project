@@ -45,6 +45,7 @@ import lesson_icon from './lesson_icon.svg'
 
 export const assets = {
     logo,
+    elevate_edu_logo_compact: logo,
     search_icon,
     sketch,
     microsoft_logo,
