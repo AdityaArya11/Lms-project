@@ -1,5 +1,4 @@
 import { createContext, useEffect, useState } from "react";
-import { dummyCourses } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
 import humanizeDuration from "humanize-duration";
 import { useAuth,useUser } from "@clerk/clerk-react";
@@ -16,7 +15,7 @@ export const AppContextProvider = ({ children }) => {
     const navigate = useNavigate()
      const {getToken} = useAuth()
      const{user} = useUser()
-    const [allCourses, setAllCourses] = useState(dummyCourses);
+    const [allCourses, setAllCourses] = useState([]);
     const [isEducator, setIsEducator] = useState(false);
     const [enrolledCourses, setEnrolledCourses] = useState([]);
     const [userData, setUserData] = useState(null);
@@ -25,14 +24,13 @@ export const AppContextProvider = ({ children }) => {
         try {
             const { data } = await axios.get(backendUrl + '/api/course/all');
 
-            if (data.success && data.courses && data.courses.length > 0) {
+            if (data.success) {
                 setAllCourses(data.courses);
             } else {
-                setAllCourses(dummyCourses);
-                if (data.message) toast.error(data.message);
+                toast.error(data.message);
             }
         } catch (error) {
-            setAllCourses(dummyCourses);
+            toast.error(error.message);
         }
     };
 
@@ -53,7 +51,7 @@ export const AppContextProvider = ({ children }) => {
                 {Authorization:`Bearer ${token}`}})
 
                 if(data.success){
-                    setUserData(data.user)
+                    setUserData(data.userData || data.user)
                 }else{
                     toast.error(data.message)
                 }

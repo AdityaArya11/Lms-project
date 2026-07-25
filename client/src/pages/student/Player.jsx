@@ -27,11 +27,11 @@ const Player = () => {
 
 
     const getCourseData = () => {
-        enrolledCourses.map((course)=>{
-            if(course._id === courseId){
+        enrolledCourses.map((course) => {
+            if (course._id === courseId) {
                 setCourseData(course)
-                course.courseRatings.map((item)=>{
-                    if(item.userId === userData._id){
+                course.courseRatings && course.courseRatings.map((item) => {
+                    if (item.userId === userData?._id) {
                         setInitialRating(item.rating)
                     }
                 })
@@ -47,59 +47,60 @@ const Player = () => {
     };
 
     useEffect(() => {
-        if(enrolledCourses.length > 0){
+        if (enrolledCourses.length > 0) {
             getCourseData()
         }
-    }, [enrolledCourses, courseId])
+    }, [enrolledCourses, courseId, userData])
 
 
-    const markLectureAsCompleted = async(lectureId) =>{
-        try{
+    const markLectureAsCompleted = async (lectureId) => {
+        try {
             const token = await getToken()
-            const {data}=await axios.post(backendUrl+'/api/user/update-course-progress',{ courseId, lectureId
-            },{headers:{ Authorization: `Bearer ${token}` } })
-            
-            if(data.success){
-                toast.success(data.message)  
-                getCourseProgress() 
-            }else{
+            const { data } = await axios.post(backendUrl + '/api/user/update-course-progress', {
+                courseId, lectureId
+            }, { headers: { Authorization: `Bearer ${token}` } })
+
+            if (data.success) {
+                toast.success(data.message)
+                getCourseProgress()
+            } else {
                 toast.error(data.message)
             }
-        }catch(error){
-            toast.error(error.message)
-        }  
-    }
-
-
-    const getCourseProgress= async()=>{
-        try {
-            const token= await getToken()
-            const {data} = await axios.post(backendUrl+ '/api/users/getCourseProgress',
-                {courseId},{headers:{ Authorization: `Bearer ${token}` } })
-
-                if(data.success){
-                    setProgressData(data.progressData)
-                }else{
-                    toast.error(data.message)
-                }
         } catch (error) {
             toast.error(error.message)
         }
     }
 
-    const handleRate = async () =>{
-        try{
-            const token = await getToken()
-            const {data} = await axios.post(backendUrl + '/api/user/add-rating' ,
-                 {courseId, rating},{headers:{Authorization: `Bearer ${token}`} })   
 
-            if(data.success){
-                toast.success(data.message)
-                fetchUserEnrolledCourses()
-            }else{
+    const getCourseProgress = async () => {
+        try {
+            const token = await getToken()
+            const { data } = await axios.post(backendUrl + '/api/user/get-course-progress',
+                { courseId }, { headers: { Authorization: `Bearer ${token}` } })
+
+            if (data.success) {
+                setProgressData(data.progressData)
+            } else {
                 toast.error(data.message)
             }
-        } catch (error){
+        } catch (error) {
+            toast.error(error.message)
+        }
+    }
+
+    const handleRate = async (rating) => {
+        try {
+            const token = await getToken()
+            const { data } = await axios.post(backendUrl + '/api/user/add-rating',
+                { courseId, rating }, { headers: { Authorization: `Bearer ${token}` } })
+
+            if (data.success) {
+                toast.success(data.message)
+                fetchUserEnrolledCourses()
+            } else {
+                toast.error(data.message)
+            }
+        } catch (error) {
             toast.error(error.message)
         }
     }

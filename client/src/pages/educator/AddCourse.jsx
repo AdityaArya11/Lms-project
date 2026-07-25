@@ -94,16 +94,21 @@ const AddCourse = () => {
         )
     }
 
+    const [loading, setLoading] = useState(false);
+
     const handleSubmit = async (e) => {
-        try{
+        try {
             e.preventDefault();
-            if(!image){
-                toast.error('Thumbnail not Selected')
+            if (!image) {
+                toast.error('Thumbnail not Selected');
+                return;
             }
 
-            const courseData ={
+            setLoading(true);
+
+            const courseData = {
                 courseTitle,
-                courseDescription: quillRef.current.innerHTML,
+                courseDescription: quillRef.current ? quillRef.current.root.innerHTML : '',
                 coursePrice: Number(coursePrice),
                 discount: Number(discount),
                 courseContent: chapters,
@@ -114,25 +119,25 @@ const AddCourse = () => {
             formData.append('image', image)
 
             const token = await getToken()
-            const {data} = await axios.post(backendUrl+'/api/educator/add-course',
-                formData,{headers:{Authorization: `Bearer ${token}`}})
+            const { data } = await axios.post(backendUrl + '/api/educator/add-course',
+                formData, { headers: { Authorization: `Bearer ${token}` } })
 
-            if(data.success){
+            if (data.success) {
                 toast.success(data.message)
                 setCourseTitle('')
                 setCoursePrice(0)
                 setDiscount(0)
                 setImage(null)
                 setChapters([])
-                quillRef.current.root.innerHTML = " "
-            }else{
+                if (quillRef.current) quillRef.current.root.innerHTML = ""
+            } else {
                 toast.error(data.message)
-            }  
-        } catch(error){
+            }
+        } catch (error) {
             toast.error(error.message)
+        } finally {
+            setLoading(false);
         }
-        
-        // submit form logic
     }
 
     useEffect(() => {
@@ -145,7 +150,7 @@ const AddCourse = () => {
     }, []);
 
     return (
-        <div className='h-screen overflow-y-scroll flex flex-col justify-between p-4 md:p-8 pt-0 font-sans'>
+        <div className='min-h-[calc(100vh-160px)] flex flex-col justify-between p-4 md:p-8 pt-0 font-sans pb-10'>
             <form onSubmit={handleSubmit} className='max-w-3xl w-full text-gray-500 space-y-5' >
                 <div className='flex flex-col gap-1'>
                     <p>Course Title</p>
@@ -238,7 +243,7 @@ const AddCourse = () => {
                     </div>
                 </div>
 
-                <button type='submit' className='bg-black text-white px-8 py-2 rounded font-semibold hover:bg-gray-800 transition'>ADD</button>
+                <button type='submit' disabled={loading} className='bg-black text-white px-8 py-2 rounded font-semibold hover:bg-gray-800 transition disabled:opacity-50'>{loading ? 'Adding...' : 'ADD'}</button>
             </form>
 
             {showPop && (

@@ -1,8 +1,9 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { AppContext } from '../../context/AppContext'
-import {Line} from 'rc-progress'
+import { Line } from 'rc-progress'
 import Footer from '../../components/student/Footer'
-import { data } from 'react-router-dom'
+import axios from 'axios'
+import { toast } from 'react-toastify'
 
 const MyEnrollments = () => {
 
@@ -17,7 +18,7 @@ const MyEnrollments = () => {
                 const tempProgressArray =await Promise.all(
                     enrolledCourses.map(
                     async (course)=>{
-                        const {data} = await axios.post(`${backendUrl}/api/user/get-course/progress/`
+                        const {data} = await axios.post(`${backendUrl}/api/user/get-course-progress`
                             , {courseId: course._id},{headers: {Authorization:`Bearer ${token}`}})
 
                              let totalLectures = calculateNoOfLectures(course);

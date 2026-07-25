@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../../context/AppContext'
-import { dummyStudentEnrolled } from '../../assets/assets'
+import { assets } from '../../assets/assets'
 import Loading from '../../components/student/Loading'
 import axios from 'axios'
+import { toast } from 'react-toastify'
 
 const StudentsEnrolled = () => {
 
@@ -10,30 +11,30 @@ const StudentsEnrolled = () => {
     const [enrolledStudents, setEnrolledStudents] = useState(null)
     const { allCourses } = useContext(AppContext)
 
-    const fetchEnrolledStudentsData = async () => {
-       try{
-          const token = await getToken()
-          const {data} = await axios.get(backendUrl+'/api/educator/enrolled-students' ,
-            {headers:{Authorization:`Bearer ${token}`}})
+    const fetchEnrolledStudents = async () => {
+        try {
+            const token = await getToken()
+            const { data } = await axios.get(backendUrl + '/api/educator/enrolled-students',
+                { headers: { Authorization: `Bearer ${token}` } })
 
-            if(data.success){
+            if (data.success) {
                 setEnrolledStudents(data.enrolledStudents.reverse())
-            }else{
+            } else {
                 toast.error(data.message)
             }
-       } catch (error){
-        toast.error(error.message)
-       }
+        } catch (error) {
+            toast.error(error.message)
+        }
     }
 
     useEffect(() => {
-        if(isEducator){
-        fetchEnrolledStudentsData()
+        if (isEducator) {
+            fetchEnrolledStudents()
         }
     }, [isEducator])
 
     return enrolledStudents ? (
-        <div className='min-h-screen flex flex-col justify-between p-4 md:p-8 pt-0'>
+        <div className='min-h-[calc(100vh-160px)] flex flex-col justify-between p-4 md:p-8 pt-0 pb-10'>
             <div className='w-full'>
                 <h2 className='pb-4 text-lg font-medium'>
                     Students Enrolled
@@ -53,8 +54,8 @@ const StudentsEnrolled = () => {
                                 <tr key={index} className='border-b border-gray-200/80 hover:bg-gray-50/50 transition-colors'>
                                     <td className='px-4 py-3 font-medium text-gray-800'>{index + 1}</td>
                                     <td className='md:px-4 pl-2 md:pl-4 py-3 flex items-center gap-3'>
-                                        <img src={item.student.imageUrl} alt="" className='w-8 h-8 rounded-full object-cover border border-gray-200' />
-                                        <span className='font-semibold text-gray-800'>{item.student.name}</span>
+                                        <img src={item.student?.imageUrl || assets.profile_img} alt="" className='w-8 h-8 rounded-full object-cover border border-gray-200' />
+                                        <span className='font-semibold text-gray-800'>{item.student?.name || 'Student'}</span>
                                     </td>
                                     <td className='px-4 py-3 font-medium text-gray-800'>
                                         {item.courseTitle}

@@ -1,10 +1,9 @@
 import React from 'react'
-import { dummyEducatorData, assets } from '../../assets/assets'
+import { assets } from '../../assets/assets'
 import { useUser, UserButton } from '@clerk/clerk-react'
 import { Link } from 'react-router-dom'
 
 const Navbar = () => {
-    const educatorData = dummyEducatorData
     const { user } = useUser()
     return (
         <div className='flex items-center justify-between px-4 sm:px-8 py-3 border-b border-gray-200 bg-white'>

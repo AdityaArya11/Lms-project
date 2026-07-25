@@ -8,9 +8,14 @@ import User from '../models/user.js';
 export const updateRoleToEducator = async (req, res) => {
     try {
         const auth = getAuth(req);
-        console.log("auth =", auth);
-
         const userId = auth.userId;
+
+        if (!userId) {
+            return res.json({
+                success: false,
+                message: "Unauthorized access: Please provide a valid 'Authorization: Bearer <token>' header"
+            });
+        }
 
         await clerkClient.users.updateUserMetadata(userId, {
             publicMetadata: {
@@ -108,27 +113,39 @@ export const getEducatorDashboardData = async (req, res) => {
 
         const purchases = await Purchase.find({
             courseID: { $in: courseIds },
-            status: 'success'
+            status: { $in: ['completed', 'success'] }
         });
 
-        const totalEarnings = purchases.reduce((total, purchase) => total + (purchase.amount || 0), 0);
+        let totalEarnings = purchases.reduce((total, purchase) => total + (Number(purchase.amount) || 0), 0);
+
+        // Fallback: If no purchases exist in purchase table, calculate from course enrolledStudents
+        if (totalEarnings === 0) {
+            courses.forEach(course => {
+                const studentCount = course.enrolledStudents ? course.enrolledStudents.length : 0;
+                const discountedPrice = course.coursePrice - (course.coursePrice * (course.discount || 0) / 100);
+                totalEarnings += studentCount * discountedPrice;
+            });
+        }
+        totalEarnings = Math.floor(totalEarnings);
 
         const enrolledStudentsData = [];
         for (const course of courses) {
-            const students = await User.find(
-                { _id: { $in: course.enrolledStudents } },
-                'name imageUrl imageURL'
-            );
-            students.forEach(student => {
-                enrolledStudentsData.push({
-                    courseTitle: course.courseTitle,
-                    student: {
-                        _id: student._id,
-                        name: student.name,
-                        imageUrl: student.imageUrl || student.imageURL
-                    }
+            if (course.enrolledStudents && course.enrolledStudents.length > 0) {
+                const students = await User.find(
+                    { _id: { $in: course.enrolledStudents } },
+                    'name imageUrl imageURL'
+                );
+                students.forEach(student => {
+                    enrolledStudentsData.push({
+                        courseTitle: course.courseTitle,
+                        student: {
+                            _id: student._id,
+                            name: student.name || 'Student',
+                            imageUrl: student.imageUrl || student.imageURL || ''
+                        }
+                    });
                 });
-            });
+            }
         }
 
         res.json({
@@ -158,14 +175,89 @@ export const getEnrolledStudentsData = async (req, res) => {
 
         const purchases = await Purchase.find({
             courseID: { $in: courseIds },
-            status: 'success'
+            status: { $in: ['completed', 'success'] }
         }).populate('userID', 'name imageUrl imageURL').populate('courseID', 'courseTitle');
 
-        const enrolledStudents = purchases.map(purchase => ({
-            student: purchase.userID,
-            courseTitle: purchase.courseID ? purchase.courseID.courseTitle : '',
-            purchaseDate: purchase.createdAt
-        }));
+        const enrolledStudents = [];
+
+        for (const purchase of purchases) {
+            if (purchase.userID) {
+                let sName = purchase.userID.name;
+                let sImg = purchase.userID.imageUrl || purchase.userID.imageURL;
+                const sId = purchase.userID._id ? purchase.userID._id.toString() : purchase.userID.toString();
+
+                if (!sName || sName === 'Student' || !sImg) {
+                    try {
+                        const clerkUser = await clerkClient.users.getUser(sId);
+                        const fName = clerkUser.firstName || '';
+                        const lName = clerkUser.lastName || '';
+                        sName = (fName + ' ' + lName).trim() || clerkUser.username || 'Student';
+                        sImg = clerkUser.imageUrl || '';
+                        await User.findByIdAndUpdate(sId, { name: sName, imageUrl: sImg, imageURL: sImg });
+                    } catch (e) {}
+                }
+
+                enrolledStudents.push({
+                    student: {
+                        _id: sId,
+                        name: sName || 'Student',
+                        imageUrl: sImg || ''
+                    },
+                    courseTitle: purchase.courseID ? purchase.courseID.courseTitle : 'Course',
+                    purchaseDate: purchase.createdAt
+                });
+            }
+        }
+
+        // Also include direct enrolledStudents from courses
+        for (const course of courses) {
+            if (course.enrolledStudents && course.enrolledStudents.length > 0) {
+                for (const studentId of course.enrolledStudents) {
+                    const studentIdStr = studentId.toString();
+                    const alreadyAdded = enrolledStudents.some(
+                        e => (e.student?._id?.toString() === studentIdStr) && e.courseTitle === course.courseTitle
+                    );
+
+                    if (!alreadyAdded) {
+                        let userDoc = await User.findById(studentIdStr);
+                        let sName = userDoc?.name;
+                        let sImg = userDoc?.imageUrl || userDoc?.imageURL;
+
+                        if (!userDoc || !sName || sName === 'Student' || !sImg) {
+                            try {
+                                const clerkUser = await clerkClient.users.getUser(studentIdStr);
+                                const fName = clerkUser.firstName || '';
+                                const lName = clerkUser.lastName || '';
+                                sName = (fName + ' ' + lName).trim() || clerkUser.username || 'Student';
+                                sImg = clerkUser.imageUrl || '';
+                                if (!userDoc) {
+                                    userDoc = await User.create({
+                                        _id: studentIdStr,
+                                        name: sName,
+                                        email: clerkUser.emailAddresses[0]?.emailAddress || '',
+                                        imageUrl: sImg,
+                                        imageURL: sImg,
+                                        enrolledCourses: [course._id]
+                                    });
+                                } else {
+                                    await User.findByIdAndUpdate(studentIdStr, { name: sName, imageUrl: sImg, imageURL: sImg });
+                                }
+                            } catch (err) {}
+                        }
+
+                        enrolledStudents.push({
+                            student: {
+                                _id: studentIdStr,
+                                name: sName || 'Student',
+                                imageUrl: sImg || ''
+                            },
+                            courseTitle: course.courseTitle,
+                            purchaseDate: userDoc?.createdAt || course.createdAt
+                        });
+                    }
+                }
+            }
+        }
 
         res.json({
             success: true,

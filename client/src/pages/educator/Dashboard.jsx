@@ -1,9 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { AppContext } from '../../context/AppContext'
 import { useNavigate } from 'react-router-dom'
-import { assets, dummyDashboardData } from '../../assets/assets'
+import { assets } from '../../assets/assets'
 import Loading from '../../components/student/Loading'
 import axios from 'axios'
+import { toast } from 'react-toastify'
 
 const Dashboard = () => {
 
@@ -20,7 +21,7 @@ const Dashboard = () => {
           )
 
             if (data.success){
-                setDashBoardData(data.dashBoardData)
+                setDashBoardData(data.dashboardData || data.dashBoardData)
             }else{
                 toast.error(data.message)
             }
@@ -39,7 +40,7 @@ const Dashboard = () => {
     }, [isEducator])
 
     return dashBoardData ? (
-        <div className='p-6 sm:p-10 space-y-8'>
+        <div className='p-6 sm:p-10 space-y-8 min-h-[calc(100vh-160px)] pb-10'>
             <div className='flex flex-wrap items-center gap-6'>
                 <div className='flex items-center gap-4 bg-white border border-gray-200/80 p-6 rounded-2xl shadow-sm min-w-[240px] flex-1'>
                     <img src={assets.appointments_icon} alt="appointments_icon" className='w-12 h-12' />
