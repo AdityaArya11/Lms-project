@@ -1,6 +1,29 @@
 import { jsPDF } from 'jspdf';
 import { toast } from 'react-toastify';
 
+// ── YouTube URL / Video ID Parser ──
+export const getYouTubeId = (url) => {
+  if (!url) return '';
+  const str = String(url).trim();
+
+  // 1. Raw 11-character video ID check
+  if (/^[a-zA-Z0-9_-]{11}$/.test(str)) {
+    return str;
+  }
+
+  // 2. Extract 11-char ID using regex for all standard YouTube URLs
+  const regExp = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+  const match = str.match(regExp);
+
+  if (match && match[1]) {
+    return match[1];
+  }
+
+  // 3. Fallback cleanup
+  const clean = str.split('?')[0].split('&')[0].split('/').pop();
+  return clean || str;
+};
+
 // ── IndexedDB Configuration ──
 const DB_NAME = 'lms_screenshots_db';
 const DB_VERSION = 1;

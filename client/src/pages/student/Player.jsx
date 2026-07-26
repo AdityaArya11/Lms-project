@@ -9,6 +9,7 @@ import Rating from '../../components/student/Rating'
 import { toast } from 'react-toastify'
 import Loading from '../../components/student/Loading'
 import axios from 'axios'
+import { getYouTubeId } from '../../utils/screenshotUtils'
 
 const Player = () => {
 
@@ -206,7 +207,7 @@ const Player = () => {
                             <div ref={playerCardRef} className="bg-white rounded-2xl border border-slate-200/80 shadow-md overflow-hidden p-3 space-y-3">
                                 <div className="rounded-xl overflow-hidden bg-slate-950 aspect-video shadow-inner">
                                     <YouTube 
-                                        videoId={playerData.lectureUrl.split('/').pop()} 
+                                        videoId={getYouTubeId(playerData.lectureUrl)} 
                                         iframeClassName="w-full h-full aspect-video"
                                         onReady={(event) => { youtubePlayerRef.current = event.target }}
                                     />

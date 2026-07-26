@@ -10,6 +10,7 @@ import Rating from '../../components/student/Rating';
 import Footer from '../../components/student/Footer';
 import YouTube from 'react-youtube';
 import { toast } from 'react-toastify';
+import { getYouTubeId } from '../../utils/screenshotUtils';
 
 const CourseDetails = () => {
 
@@ -171,7 +172,7 @@ const CourseDetails = () => {
                                                                 {lecture.isPreviewFree && (
                                                                     <p 
                                                                     onClick={()=> setPlayerData({
-                                                                        videoId: lecture.lectureUrl.split('/').pop()
+                                                                        videoId: getYouTubeId(lecture.lectureUrl)
                                                                     })}
                                                                         
                                                                     

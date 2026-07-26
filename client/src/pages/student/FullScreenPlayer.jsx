@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect, useRef, useCallback } from 'rea
 import { useParams, useNavigate } from 'react-router-dom';
 import YouTube from 'react-youtube';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 import { AppContext } from '../../context/AppContext';
 import {
   dbGetByLecture,
@@ -9,19 +10,21 @@ import {
   dbDelete,
   captureFrame,
   generatePdfFromSnapshots,
+  getYouTubeId,
 } from '../../utils/screenshotUtils';
 import './FullScreenPlayer.css';
 
 const FullScreenPlayer = () => {
   const { courseId, lectureId } = useParams();
   const navigate = useNavigate();
-  const { enrolledCourses } = useContext(AppContext);
+  const { enrolledCourses, backendUrl, getToken } = useContext(AppContext);
 
   const [courseData, setCourseData] = useState(null);
   const [playerData, setPlayerData] = useState(null);
   const [allLectures, setAllLectures] = useState([]);
   const [currentLectureIndex, setCurrentLectureIndex] = useState(-1);
   const [snapshots, setSnapshots] = useState([]);
+  const [progressData, setProgressData] = useState(null);
   const [isCapturing, setIsCapturing] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
   const youtubePlayerRef = useRef(null);
@@ -74,6 +77,47 @@ const FullScreenPlayer = () => {
   useEffect(() => {
     loadScreenshots();
   }, [loadScreenshots]);
+
+  // ── Operations: Course Progress & Mark Complete ──
+  const getCourseProgress = useCallback(async () => {
+    try {
+      const token = await getToken();
+      const { data } = await axios.post(
+        `${backendUrl}/api/user/get-course-progress`,
+        { courseId },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (data.success) {
+        setProgressData(data.progressData);
+      }
+    } catch (error) {
+      console.error('Error fetching progress:', error.message);
+    }
+  }, [backendUrl, courseId, getToken]);
+
+  useEffect(() => {
+    getCourseProgress();
+  }, [getCourseProgress]);
+
+  const markLectureAsCompleted = async (targetLectureId) => {
+    if (!targetLectureId) return;
+    try {
+      const token = await getToken();
+      const { data } = await axios.post(
+        `${backendUrl}/api/user/update-course-progress`,
+        { courseId, lectureId: targetLectureId },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (data.success) {
+        toast.success(data.message);
+        getCourseProgress();
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   // ── Operations: Handle Take Snapshot ──
   const handleTakeSnapshot = async () => {
@@ -187,7 +231,7 @@ const FullScreenPlayer = () => {
             <div className="video-card">
               <div className="w-full aspect-video rounded-xl overflow-hidden bg-black shadow-inner">
                 <YouTube
-                  videoId={playerData.lectureUrl ? playerData.lectureUrl.split('/').pop() : ''}
+                  videoId={getYouTubeId(playerData.lectureUrl)}
                   iframeClassName="w-full h-full aspect-video"
                   onReady={(e) => (youtubePlayerRef.current = e.target)}
                 />
@@ -203,6 +247,16 @@ const FullScreenPlayer = () => {
                 </div>
 
                 <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => markLectureAsCompleted(playerData.lectureId || playerData._id)}
+                    className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-xs shrink-0 ${
+                      progressData && progressData.lectureCompleted?.includes(playerData.lectureId || playerData._id)
+                        ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                        : 'bg-blue-600 hover:bg-blue-700 text-white shadow-sm'
+                    }`}
+                  >
+                    {progressData && progressData.lectureCompleted?.includes(playerData.lectureId || playerData._id) ? '✓ Completed' : 'Mark Complete'}
+                  </button>
                   <button
                     disabled={currentLectureIndex <= 0}
                     onClick={() => handleSwitchLecture(currentLectureIndex - 1)}
