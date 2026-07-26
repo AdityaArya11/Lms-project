@@ -22,7 +22,7 @@ const CourseDetails = () => {
     const [playerData, setPlayerData] = useState(null)
 
 
-    const { allCourses, calculateRating, calculateNoOfLectures, calculateChapterTime, calculateCourseDuration, currency,
+    const { allCourses, calculateRating, calculateNoOfLectures, calculateChapterTime, formatLectureDuration, calculateCourseDuration, currency,
         backendUrl, userData, getToken, navigate } = useContext(AppContext)
 
     const fetchCourseData = async () => {
@@ -180,7 +180,7 @@ const CourseDetails = () => {
                                                                         Preview
                                                                     </p>
                                                                 )}
-                                                                <p className='font-medium'>{humanizeDuration(lecture.lectureDuration * 60 * 1000, { units: ['h', 'm'], round: true })}</p>
+                                                                <p className='font-medium'>{formatLectureDuration(lecture.lectureDuration)}</p>
                                                             </div>
                                                         </div>
                                                     </li>

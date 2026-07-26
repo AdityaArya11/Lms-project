@@ -13,7 +13,7 @@ import { getYouTubeId } from '../../utils/screenshotUtils'
 
 const Player = () => {
 
-    const {enrolledCourses, calculateChapterTime, backendUrl, getToken, userData,
+    const {enrolledCourses, calculateChapterTime, formatLectureDuration, backendUrl, getToken, userData,
         fetchUserEnrolledCourses} = useContext(AppContext)
     const navigate = useNavigate();
     const {courseId} = useParams()
@@ -178,7 +178,7 @@ const Player = () => {
                                                                     Play Video
                                                                 </button>
                                                             )}
-                                                            <span className='font-medium text-slate-400'>{humanizeDuration(lecture.lectureDuration * 60 * 1000, { units: ['h', 'm'], round: true })}</span>
+                                                            <span className='font-medium text-slate-400'>{formatLectureDuration(lecture.lectureDuration)}</span>
                                                         </div>
                                                     </div>
                                                 </li>

@@ -74,21 +74,33 @@ export const AppContextProvider = ({ children }) => {
         return Math.floor(totalRating / course.courseRatings.length);
     };
 
+    const formatLectureDuration = (duration) => {
+        const num = Number(duration) || 0;
+        if (num <= 0) return '0m';
+        const minutes = num > 100 ? num / 60 : num;
+        return humanizeDuration(Math.round(minutes * 60 * 1000), { units: ['h', 'm'], round: true });
+    };
+
     const calculateChapterTime = (chapter) => {
-        let time = 0;
-        chapter.chapterContent.forEach(lecture => {
-            time += lecture.lectureDuration;
-        });
-        return humanizeDuration(time * 60 * 1000, { units: ['h', 'm'] });
+        let timeInMinutes = 0;
+        if (chapter && Array.isArray(chapter.chapterContent)) {
+            chapter.chapterContent.forEach(lecture => {
+                const num = Number(lecture.lectureDuration) || 0;
+                timeInMinutes += num > 100 ? num / 60 : num;
+            });
+        }
+        return humanizeDuration(Math.round(timeInMinutes * 60 * 1000), { units: ['h', 'm'], round: true });
     };
 
     const calculateNoOfLectures = (course) => {
         let noOfLectures = 0;
-        course.courseContent.forEach(chapter => {
-            if (Array.isArray(chapter.chapterContent)) {
-                noOfLectures += chapter.chapterContent.length;
-            }
-        });
+        if (course && Array.isArray(course.courseContent)) {
+            course.courseContent.forEach(chapter => {
+                if (Array.isArray(chapter.chapterContent)) {
+                    noOfLectures += chapter.chapterContent.length;
+                }
+            });
+        }
         return noOfLectures;
     };
 
@@ -118,16 +130,19 @@ export const AppContextProvider = ({ children }) => {
         }
     }, [user])
 
-
-
     const calculateCourseDuration = (course) => {
-        let time = 0;
-        course.courseContent.map(chapter => {
-            chapter.chapterContent.map(lecture => {
-                time += lecture.lectureDuration;
+        let timeInMinutes = 0;
+        if (course && Array.isArray(course.courseContent)) {
+            course.courseContent.forEach(chapter => {
+                if (Array.isArray(chapter.chapterContent)) {
+                    chapter.chapterContent.forEach(lecture => {
+                        const num = Number(lecture.lectureDuration) || 0;
+                        timeInMinutes += num > 100 ? num / 60 : num;
+                    });
+                }
             });
-        });
-        return humanizeDuration(time * 60 * 1000, { units: ['h', 'm'] });
+        }
+        return humanizeDuration(Math.round(timeInMinutes * 60 * 1000), { units: ['h', 'm'], round: true });
     };
 
 
@@ -138,6 +153,7 @@ export const AppContextProvider = ({ children }) => {
         navigate,
         calculateRating,
         calculateChapterTime,
+        formatLectureDuration,
         calculateNoOfLectures,
         calculateCourseDuration,
         isEducator,
