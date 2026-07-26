@@ -10,6 +10,7 @@ import StudentsEnrolled from "./pages/educator/StudentsEnrolled";
 import MyCourses from "./pages/educator/MyCourses";
 import CoursesList from "./pages/student/CoursesList";
 import Player from "./pages/student/Player";
+import FullScreenPlayer from "./pages/student/FullScreenPlayer";
 import Loading from "./components/student/Loading";
 import Educator from "./pages/educator/Educator";
 import Navbar from "./components/student/Navbar";
@@ -30,6 +31,7 @@ const App = () => {
         <Route path="/course/:id" element={<CourseDetails />} />
         <Route path="/my-enrollments" element={<MyEnrollments />} />
         <Route path="/player/:courseId" element={<Player />} />
+        <Route path="/full-player/:courseId/:lectureId" element={<FullScreenPlayer />} />
         <Route path="/loading/:path" element={<Loading />} />
         <Route path="/educator" element={<Educator />}>
           <Route index element={<Dashboard />} />

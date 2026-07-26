@@ -1,5 +1,5 @@
-import React, { useContext, useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import React, { useContext, useState, useEffect, useRef } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 import { AppContext } from '../../context/AppContext'
 import { assets } from '../../assets/assets'
 import humanizeDuration from 'humanize-duration'
@@ -8,19 +8,23 @@ import Footer from '../../components/student/Footer'
 import Rating from '../../components/student/Rating'
 import { toast } from 'react-toastify'
 import Loading from '../../components/student/Loading'
+import AiTutorDrawer from '../../components/student/AiTutorDrawer'
 import axios from 'axios'
 
 const Player = () => {
 
-     
     const {enrolledCourses, calculateChapterTime, backendUrl, getToken, userData,
-        fetchUserEnrolledCourses} =useContext(AppContext)
-    const{courseId} =useParams()
-    const [courseData,setCourseData] =useState(null)
-    const [openSections,setOpenSections] =useState({})
-    const [playerData,setPlayerData] =useState(null)
-    const [progressData, setProgressData] =useState(null)
-    const [initialRating, setInitialRating] =useState(0)
+        fetchUserEnrolledCourses} = useContext(AppContext)
+    const navigate = useNavigate();
+    const {courseId} = useParams()
+    const [courseData, setCourseData] = useState(null)
+    const [openSections, setOpenSections] = useState({})
+    const [playerData, setPlayerData] = useState(null)
+    const [progressData, setProgressData] = useState(null)
+    const [initialRating, setInitialRating] = useState(0)
+
+    const youtubePlayerRef = useRef(null)
+    const playerCardRef = useRef(null)
 
     const getCourseData = () => {
         enrolledCourses.map((course) => {
@@ -48,7 +52,6 @@ const Player = () => {
         }
     }, [enrolledCourses, courseId, userData])
 
-
     const markLectureAsCompleted = async (lectureId) => {
         try {
             const token = await getToken()
@@ -66,7 +69,6 @@ const Player = () => {
             toast.error(error.message)
         }
     }
-
 
     const getCourseProgress = async () => {
         try {
@@ -105,13 +107,22 @@ const Player = () => {
         getCourseProgress()
     }, [])
 
-
     return courseData ? (
         <>
         <div className='min-h-screen bg-slate-50/60 pb-16'>
             <div className='max-w-7xl mx-auto px-4 sm:px-6 md:px-12 pt-8 flex flex-col-reverse lg:grid lg:grid-cols-12 gap-8'>
                 {/* Left column - Course Structure */}
                 <div className='lg:col-span-7 text-slate-800 space-y-6'>
+                    
+                    {/* Header Action Bar */}
+                    <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                            <h1 className="text-lg sm:text-xl font-extrabold text-slate-900 leading-tight">{courseData.courseTitle}</h1>
+                            <p className="text-xs text-slate-500 font-medium">Instructor: {courseData.educator?.name || 'Instructor'}</p>
+                        </div>
+                    </div>
+
+                    {/* Course Structure */}
                     <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs">
                         <div className="flex items-center justify-between mb-4">
                             <h2 className='text-xl font-extrabold text-slate-900'>Course Structure</h2>
@@ -153,9 +164,7 @@ const Player = () => {
                                                     />
                                                     <div className='flex-1 flex justify-between items-center min-w-0'>
                                                         <p 
-                                                            onClick={() => setPlayerData({
-                                                                ...lecture, chapterTitle: chapter.chapterTitle, chapter: index + 1, lecture: lectureindex + 1
-                                                            })}
+                                                            onClick={() => navigate(`/full-player/${courseId}/${lecture.lectureId || lecture._id}`)}
                                                             className='font-medium text-slate-800 text-sm hover:text-indigo-600 transition-colors cursor-pointer truncate pr-2'
                                                         >
                                                             {lecture.lectureTitle}
@@ -163,9 +172,7 @@ const Player = () => {
                                                         <div className='flex items-center gap-3 text-xs text-slate-500 shrink-0'>
                                                             {lecture.lectureUrl && (
                                                                 <button 
-                                                                    onClick={() => setPlayerData({
-                                                                        ...lecture, chapterTitle: chapter.chapterTitle, chapter: index + 1, lecture: lectureindex + 1
-                                                                    })}
+                                                                    onClick={() => navigate(`/full-player/${courseId}/${lecture.lectureId || lecture._id}`)}
                                                                     className='text-indigo-600 font-bold hover:bg-indigo-50 px-2.5 py-1 rounded-md transition-colors cursor-pointer border border-indigo-100'
                                                                 >
                                                                     Play Video
@@ -193,15 +200,16 @@ const Player = () => {
                     </div>
                 </div>
 
-                {/* Right column - Video Player */}
+                {/* Right column - Video Player Container */}
                 <div className='lg:col-span-5'>
                     <div className="sticky top-24 space-y-4">
                         {playerData ? (
-                            <div className="bg-white rounded-2xl border border-slate-200/80 shadow-md overflow-hidden p-3 space-y-3">
+                            <div ref={playerCardRef} className="bg-white rounded-2xl border border-slate-200/80 shadow-md overflow-hidden p-3 space-y-3">
                                 <div className="rounded-xl overflow-hidden bg-slate-950 aspect-video shadow-inner">
                                     <YouTube 
                                         videoId={playerData.lectureUrl.split('/').pop()} 
                                         iframeClassName="w-full h-full aspect-video"
+                                        onReady={(event) => { youtubePlayerRef.current = event.target }}
                                     />
                                 </div>
                                 <div className='px-2 pt-1 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3'>
@@ -222,17 +230,47 @@ const Player = () => {
                                         {progressData && progressData.lectureCompleted.includes(playerData.lectureId) ? '✓ Completed' : 'Mark Complete'}
                                     </button>
                                 </div>
+
+                                {/* Fullscreen Player Button */}
+                                <div className="border-t border-slate-100 pt-3 px-2">
+                                    <button
+                                        onClick={() => navigate(`/full-player/${courseId}/${playerData.lectureId || playerData._id}`)}
+                                        className="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2.5 px-4 rounded-xl transition-all cursor-pointer shadow-xs flex items-center justify-center gap-2"
+                                    >
+                                        <span>🖥️</span>
+                                        <span>Open Fullscreen Video Player</span>
+                                    </button>
+                                </div>
+
                             </div>
                         ) : (
-                            <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm overflow-hidden text-center space-y-3">
+                            <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm overflow-hidden text-center space-y-4">
                                 <img src={courseData ? courseData.courseThumbnail : ''} alt="Thumbnail" className="w-full rounded-xl object-cover h-56 shadow-xs" />
-                                <p className="text-sm font-semibold text-slate-600">Select a lecture from the course structure to start watching</p>
+                                <div>
+                                    <p className="text-sm font-bold text-slate-800">Ready to start learning?</p>
+                                    <p className="text-xs text-slate-500 mt-0.5">Click any lecture from the left structure to open the Fullscreen Video Player.</p>
+                                </div>
+                                {courseData && courseData.courseContent && courseData.courseContent[0]?.chapterContent[0] && (
+                                    <button
+                                        onClick={() => {
+                                            const firstLec = courseData.courseContent[0].chapterContent[0];
+                                            navigate(`/full-player/${courseId}/${firstLec.lectureId || firstLec._id}`);
+                                        }}
+                                        className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all cursor-pointer shadow-xs inline-flex items-center gap-1.5"
+                                    >
+                                        <span>▶</span>
+                                        <span>Start First Lecture</span>
+                                    </button>
+                                )}
                             </div>
                         )}
                     </div>
                 </div>
             </div>
         </div>
+
+        {/* 24/7 AI Smart Learning Tutor Drawer */}
+        <AiTutorDrawer courseId={courseId} activeLecture={playerData} backendUrl={backendUrl} />
 
         <Footer/>
         </>
