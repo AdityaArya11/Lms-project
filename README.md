@@ -1,4 +1,4 @@
-# 🎓 LMS Platform - Full-Stack Learning Management System
+# 🎓 ELEVATE.EDU- AI Powered Full-Stack Learning Management System
 
 An end-to-end, feature-rich **Learning Management System (LMS)** built with the **MERN** stack (MongoDB, Express, React, Node.js), **Vite**, **Tailwind CSS**, **Clerk Authentication**, **Stripe Payments**, and **Cloudinary** media management. 
 
