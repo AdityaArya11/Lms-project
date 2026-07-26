@@ -8,7 +8,6 @@ import Footer from '../../components/student/Footer'
 import Rating from '../../components/student/Rating'
 import { toast } from 'react-toastify'
 import Loading from '../../components/student/Loading'
-import AiTutorDrawer from '../../components/student/AiTutorDrawer'
 import axios from 'axios'
 
 const Player = () => {
@@ -268,9 +267,6 @@ const Player = () => {
                 </div>
             </div>
         </div>
-
-        {/* 24/7 AI Smart Learning Tutor Drawer */}
-        <AiTutorDrawer courseId={courseId} activeLecture={playerData} backendUrl={backendUrl} />
 
         <Footer/>
         </>

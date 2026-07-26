@@ -4,7 +4,6 @@ import YouTube from 'react-youtube';
 import { toast } from 'react-toastify';
 import { jsPDF } from 'jspdf';
 import { AppContext } from '../../context/AppContext';
-import AiTutorDrawer from '../../components/student/AiTutorDrawer';
 
 // ── IndexedDB Helpers (no backend, no Cloudinary) ──
 const DB_NAME = 'lms_screenshots_db';
@@ -517,8 +516,6 @@ const FullScreenPlayer = () => {
         </div>
       )}
 
-      {/* AI Tutor */}
-      <AiTutorDrawer courseId={courseId} activeLecture={playerData} backendUrl={backendUrl} />
     </div>
   );
 };
